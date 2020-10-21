@@ -11,6 +11,8 @@ for i in range (0 , size):
         print((i - max) * " " + (size - i - 1) * "**" + "*")
 
 '''
+solve with nested for loops!
+
 this also worked bud was not nice
 for i in range (0 , size):
     while i < size / 2:

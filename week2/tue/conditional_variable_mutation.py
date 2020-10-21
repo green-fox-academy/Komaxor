@@ -9,12 +9,12 @@ print(out)
 b = 13
 out2 = ""
 
-if 10 <= b and b <= 20:
-    out2 = "Sweet!"
-elif b < 10:
+if b < 10:
     out2 = "Less!"
 elif b > 20:
     out2 = "More!"
+else:
+    out2 = "Sweet!"
 
 print(out2)
 
@@ -22,9 +22,9 @@ c = 123
 credits = 100
 is_bonus = False
 
-if credits >= 50 and is_bonus is False:
+if credits >= 50 and not is_bonus: #not = is False
     c -= 2
-elif credits < 50 and is_bonus is False:
+elif credits < 50 and not is_bonus:
     c -=1
 
 print(c)
