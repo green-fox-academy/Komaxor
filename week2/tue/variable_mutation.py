@@ -38,12 +38,11 @@ i2 = 3
 first = 10>3**2
 second = 10<3**3
 
-if first == second == True:
-    print("Yes")
+print(first == second == True)
 
 j = 1521
 
 c_one = j % 5
 c_two = j % 3
-if c_one or c_two == 0:
-    print("yes")
+
+print(c_one == 0 or c_two == 0)

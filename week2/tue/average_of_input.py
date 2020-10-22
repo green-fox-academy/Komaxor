@@ -5,6 +5,6 @@ fourth = int(input("Tell me a number agan! "))
 fifth = int(input("Tell me a final number! "))
 
 total = first + second + third + fourth + fifth
-avg = total/5
+avg = total / 5
 
 print("Sum: " + str(total) + ", Average: " + str(avg))
