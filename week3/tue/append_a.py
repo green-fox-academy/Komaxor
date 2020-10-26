@@ -1,3 +1,5 @@
 animals = ["koal", "pand", "zebr"]
-animals = [item + "a" for item in animals]
-print(animals)
+def append_a(x):
+    x = [item + "a" for item in x]
+    return x
+print(append_a(animals))
