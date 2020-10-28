@@ -1,13 +1,10 @@
 num_list = [10, 30, 20, 30, 20, 40, 40]
 
-def unique(x):
-    x.sort()
-    for i in range (1, len(x)):
-        if i > len(x):
-            break
-        if x[i] == x[i - 1]:
-            x.remove(x[i - 1])
-    return x
-            
-
+def unique(my_list):
+    new_list = []
+    for number in my_list:
+        if number not in new_list: 
+            new_list.append(number)
+    return new_list
+    
 print(unique(num_list))
