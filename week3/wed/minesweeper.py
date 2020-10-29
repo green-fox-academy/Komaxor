@@ -17,7 +17,7 @@ def map_size():
 
 def draw_map(size):
     for _ in range (0, size):
-        print(size * "0")
+        print(size * "O")
 
 def num_bombs(size):
     allowed_difficulty = (1,2)
@@ -35,7 +35,6 @@ def num_bombs(size):
     bombs = round(size * size * difficulty / 10)
     return bombs
 
-
 def get_bombs(s):
     number_of_bombs = num_bombs(size)
     bomb_list = []
@@ -43,15 +42,18 @@ def get_bombs(s):
     for i in range (0, (s * s)):
         fields.append(i)
     while len(bomb_list) < number_of_bombs:
-        bomb_list.append(random.choice(fields)) #TODO prevent duplicates!
+        x = random.choice(fields)
+        if x not in bomb_list:
+            bomb_list.append(x)
     return sorted(bomb_list)
 
 def draw_bombs(b, s):
+    num = count_neighbour_bombs(s, b)
     for i in range (0, (s * s)):
         if i in b:
-            print("X", end="")
+            print("M", end="")
         else:
-            print("0", end="")
+            print(num[i], end="")
         if (i + 1) % s == 0:
             print()
 
@@ -80,7 +82,127 @@ def y_input(size):
         else:
             return y
 
-size = map_size()
-draw_map(size)
-bombs = get_bombs(size)
-draw_bombs(bombs, size)
+def count_neighbour_bombs(size, b):
+    for i in range (0, (size * size)):
+        neighbours = []
+        all_neighbours = []
+        if i == 0:
+            if (i + 1) in b:
+                neighbours.append(i)
+            if (i + size + 1) in b:
+                neighbours.append(i)
+            if (i + size) in b:
+                neighbours.append(i)        
+        elif i == size:
+            if (i - 1) in b:
+                neighbours.append(i)
+            if (i + size - 1) in b:
+                neighbours.append(i)
+            if (i + size) in b:
+                neighbours.append(i)        
+        elif i == (size - 1) * size +1:
+            if (i + 1) in b:
+                neighbours.append(i)
+            if (i - size + 1) in b:
+                neighbours.append(i)
+            if (i - size) in b:
+                neighbours.append(i)        
+        elif i == size * size:
+            if (i - 1) in b:
+                neighbours.append(i)
+            if (i - size - 1) in b:
+                neighbours.append(i)
+            if (i - size) in b:
+                neighbours.append(i)        
+        elif i % (size + 1) == 0:
+            if (i - size) in b:
+                neighbours.append(i)  
+            if (i - size + 1) in b:
+                neighbours.append(i)
+            if (i + 1) in b:
+                neighbours.append(i)
+            if (i + size) in b: 
+                neighbours.append(i)
+            if (i + size + 1) in b:
+                neighbours.append(i)    
+        elif i % size == 0:
+            if (i - size - 1) in b:
+                neighbours.append(i)
+            if (i - size) in b:
+                neighbours.append(i)  
+            if (i - 1) in b:
+                neighbours.append(i)
+            if (i + size - 1) in b:
+                neighbours.append(i) 
+            if (i + size) in b: 
+                neighbours.append(i)
+        elif i < size:
+            if (i - 1) in b:
+                neighbours.append(i)
+            if (i + 1) in b:
+                neighbours.append(i)
+            if (i + size - 1) in b:
+                neighbours.append(i) 
+            if (i + size) in b: 
+                neighbours.append(i)
+            if (i + size + 1) in b:
+                neighbours.append(i)    
+        elif i > size * (size - 1):
+            if (i - size - 1) in b:
+                neighbours.append(i)
+            if (i - size) in b:
+                neighbours.append(i)  
+            if (i - size + 1) in b:
+                neighbours.append(i)
+            if (i - 1) in b:
+                neighbours.append(i)
+            if (i + 1) in b:
+                neighbours.append(i)
+        else:
+            if (i - size - 1) in b:
+                neighbours.append(i)
+            if (i - size) in b:
+                neighbours.append(i)  
+            if (i - size + 1) in b:
+                neighbours.append(i)
+            if (i - 1) in b:
+                neighbours.append(i)
+            if (i + 1) in b:
+                neighbours.append(i)
+            if (i + size - 1) in b:
+                neighbours.append(i) 
+            if (i + size) in b: 
+                neighbours.append(i)
+            if (i + size + 1) in b:
+                neighbours.append(i)
+        print(len(neighbours))
+        all_neighbours.append(len(neighbours)) #TODO why not size^2 long???
+    print(all_neighbours)
+    return all_neighbours
+
+
+def move(s, b):
+    x = x_input(s)
+    y = y_input(s)
+    place = ((x - 1) * s + y) - 1
+    if place in b:
+        print("You died!")
+    else:
+        print(place + 1)
+
+#TODO def gameover():
+
+while True:
+    print("Mark: Welcome to the Minesweeper game! Let's play!")
+    size = map_size()
+    draw_map(size)
+    bombs = get_bombs(size)
+    draw_bombs(bombs, size)
+    for i in range (0, (size * size - len(bombs))):
+        move(size, bombs)
+    restart = str(input("Play again? "))
+    if restart.lower().startswith("y"):
+        continue
+    else:
+        print("Bye")
+        break
