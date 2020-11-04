@@ -13,8 +13,8 @@ todoText = " - Buy milk\n"
 
 print(todoText)'''
 
-todoText = " - Buy milk\n"
-tt2 = todoText + " - Download games"
+todoText = "\t- Buy milk\n"
+tt2 = todoText + "\t- Download games"
 tt3 = "My todo:\n" + tt2[0:]
-tt4 = tt3 + "\n     - Diablo"
+tt4 = tt3 + "\n\t\t- Diablo"
 print(tt4)

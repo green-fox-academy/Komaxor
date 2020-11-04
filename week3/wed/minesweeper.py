@@ -188,7 +188,7 @@ def move(s, b, v, n):
     if place not in v:
         v.append(place)
     draw_bombs(b, s, v, n)
-    print(v)
+    #print(v)
     if place in b:
         print("You died!")
         return False
@@ -203,8 +203,10 @@ while True:
     n = count_neighbour_bombs(size, bombs)
     draw_map(size)
     while gameon:
-        print(gameon)
         gameon = move(size, bombs, visible, n)
+        if len(visible) == (size * size) - len(bombs):
+            print("Congratulations! You won!")
+            gameon = False
     restart = str(input("Play again? "))
     if restart.lower().startswith("y"):
         continue

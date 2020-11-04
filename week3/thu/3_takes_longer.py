@@ -6,6 +6,7 @@ quote = "Hofstadter's Law: It you expect, even when you take into account Hofsta
 print(quote)'''
 
 quote = "Hofstadter's Law: It you expect, even when you take into account Hofstadter's Law."
-new = quote[:21] + 'always takes longer than ' + quote[21:]
-
+index =  quote.find("you")
+print(index)
+new = quote[:index] + 'always takes longer than ' + quote[index:]
 print(new)
