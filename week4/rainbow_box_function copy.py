@@ -66,7 +66,7 @@ def color_input_b():
 def drawer(length, red, green, blue):
     a = (300 - length) / 2
     d = 300 - ((300 - length) / 2)
-    colour = '#%02x%02x%02x' % (red, green, blue) # TODO i don't understand but it works
+    colour = '#%02x%02x%02x' % (red, green, blue)
     canvas.create_rectangle(a, a, d, d, fill=colour)
 
 for _ in range (0, 3):

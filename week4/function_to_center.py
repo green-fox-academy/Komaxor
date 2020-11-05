@@ -42,15 +42,25 @@ def drawer(x, y):
 
 drawer(x, y)
 
-for i in range(0, 301):
-    for j in range(0, 301):
-        if i == 0 or i == 300:
-            if j % 20 == 0:
-                canvas.create_line(i, j, 150, 150)
-        if j == 0 or j ==300:
-            if i % 20 ==0:
-                canvas.create_line(i, j, 150, 150)
+edge = []
 
+for i in range(0, 301, 20):
+    edge.append(i)
+
+for i in range(0, len(edge)):
+    canvas.create_line(0, edge[i], 150, 150)
+    canvas.create_line(300, edge[i], 150, 150)
+    canvas.create_line(edge[i], 0, 150, 150)
+    canvas.create_line(edge[i], 300, 150, 150)
+
+'''
+for i in range(0, 301, 20):
+    for j in range(0, 301, 20):
+        if i == 0 or i == 300:
+            canvas.create_line(i, j, 150, 150)
+        if j == 0 or j == 300:
+            canvas.create_line(i, j, 150, 150)
+'''
 # Fill the canvas with lines from the edges, every 20 px, to the center.
-#TODO
 root.mainloop()
+
