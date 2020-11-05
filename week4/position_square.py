@@ -13,7 +13,7 @@ canvas.pack()
 def x_input():
         while True:
             try:
-                x = int(input("How far aside away do you want the line? "))
+                x = int(input("How far aside away do you want the box? "))
             except ValueError:
                 print("Enter a number!")
                 continue
@@ -26,11 +26,11 @@ def x_input():
 def y_input():
         while True:
             try:
-                y = int(input("How high do you want the line? "))
+                y = int(input("How high do you want the box? "))
             except ValueError:
                 print("Enter a number!")
                 continue
-            if 250 <= x or x <= 0:
+            if 250 <= y or y <= 0:
                 print("Number must be between 0 and 250")
                 continue
             else:
