@@ -6,7 +6,8 @@ canvas = Canvas(root, width='300', height='300')
 canvas.pack()
 
 # Create a function that draws a single line and takes 2 parameters:
-# the x and y coordinates of the line's starting point
+# The x and y coordinates of the line's starting point
+# and draws a line from that point to the center of the canvas.
 def x_input():
         while True:
             try:
@@ -33,14 +34,15 @@ def y_input():
             else:
                 return y
 
+x = x_input()
+y = y_input()
+
 # and draws a line from that point to the center of the canvas.
 def drawer(x, y):
     canvas.create_line(x, y, 150, 150)
 
-# Draw at least 3 lines with that function using a loop.
-for _ in range (0, 3):
-    x = x_input()
-    y = y_input()
-    drawer(x, y)
+drawer(x, y)
 
+# Fill the canvas with lines from the edges, every 20 px, to the center.
+#TODO
 root.mainloop()

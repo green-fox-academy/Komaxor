@@ -14,7 +14,7 @@ def x_input():
             except ValueError:
                 print("Enter a number!")
                 continue
-            if 250 <= x or x <= 0:
+            if 250 < x or x < 0:
                 print("Number must be between 0 and 250")
                 continue
             else:
@@ -27,8 +27,8 @@ def y_input():
             except ValueError:
                 print("Enter a number!")
                 continue
-            if 250 <= y or y <= 0:
-                print("Number must be between 0 and 250")
+            if 300 < y or y < 0:
+                print("Number must be between 0 and 300")
                 continue
             else:
                 return y
