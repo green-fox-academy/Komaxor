@@ -5,17 +5,20 @@ root = Tk()
 canvas = Canvas(root, width='300', height='300')
 canvas.pack()
 
-# Create a function that draws a single line and takes 2 parameters:
-# the x and y coordinates of the line's starting point
+# Create a function that draws one square and takes 2 parameters:
+# The x and y coordinates of the square's top left corner
+# and draws a 50x50 square from that point.
+# Draw 3 squares with that function.
+# Avoid code duplication.
 def x_input():
         while True:
             try:
-                x = int(input("How wide away do you want the line? "))
+                x = int(input("How far aside away do you want the line? "))
             except ValueError:
                 print("Enter a number!")
                 continue
-            if 300 <= x or x <= 0:
-                print("Number must be between 0 and 300")
+            if 250 <= x or x <= 0:
+                print("Number must be between 0 and 250")
                 continue
             else:
                 return x
@@ -23,21 +26,19 @@ def x_input():
 def y_input():
         while True:
             try:
-                y = int(input("How high away do you want the line? "))
+                y = int(input("How high do you want the line? "))
             except ValueError:
                 print("Enter a number!")
                 continue
-            if 300 <= x or x <= 0:
-                print("Number must be between 0 and 300")
+            if 250 <= x or x <= 0:
+                print("Number must be between 0 and 250")
                 continue
             else:
                 return y
 
-# and draws a line from that point to the center of the canvas.
 def drawer(x, y):
-    canvas.create_line(x, y, 150, 150)
+    canvas.create_rectangle(x, y, x + 50, y + 50)
 
-# Draw at least 3 lines with that function using a loop.
 for _ in range (0, 3):
     x = x_input()
     y = y_input()

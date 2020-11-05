@@ -32,11 +32,9 @@ def y_input():
                 continue
             else:
                 return y
-
-# and draws a line from that point to the center of the canvas.
+# and draws a 50 long horizontal line from that point.
 def drawer(x, y):
-    canvas.create_line(x, y, 150, 150)
-
+    canvas.create_line(x, y, x + 50, y)
 # Draw at least 3 lines with that function using a loop.
 for _ in range (0, 3):
     x = x_input()
