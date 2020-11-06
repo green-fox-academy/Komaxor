@@ -4,7 +4,6 @@
 
 # It should support the following operations, create a function called calculate():
 # +, -, *, /, % and it should support two operands.
-
 # The format of the expressions must be: {operation} {operand} {operand}.
 # Examples: "+ 3 3" (the result will be 6) or "* 4 4" (the result will be 16)
 
@@ -16,3 +15,42 @@
 # Waits for the user input
 # Print the result
 # Exit
+
+def user_input():
+    while True:
+        x = input("Please type in the expression: ")
+        words = x.split()
+        print(words)
+        if len(words) != 3:
+            print("You must enter the operation first then the two operands")
+            continue
+        if words[0] not in ["+", "-", "*", "/", "%"]:
+            print("The first word shuld be your operation sign")
+            continue
+        if words[1].isdigit() == False:
+            print(words[1])
+            print("The second word shuld be a number")
+            continue
+        if words[2].isdigit() == False:
+            print("The third word shuld be a number")
+            continue
+        else:
+            return words
+
+def calculate():
+    words = user_input()
+    num1 = int(words[1])
+    num2 = int(words[2])
+    if words[0] == "+":
+        res = num1 + num2
+    elif words[0] == "-":
+        res = num1 - num2
+    elif words[0] == "*":
+        res = num1 * num2
+    elif words[0] == "/":
+        res = num1 / num2
+    elif words[0] == "%":
+        res = num1 % num2
+    return res
+
+print(calculate())
