@@ -20,7 +20,6 @@ def user_input():
     while True:
         x = input("Please type in the expression: ")
         words = x.split()
-        print(words)
         if len(words) != 3:
             print("You must enter the operation first then the two operands")
             continue
