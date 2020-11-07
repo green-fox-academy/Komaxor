@@ -12,46 +12,63 @@
 #> 15
 #Congratulations. You won!
 
-from random import randint
+import random
 
-def guessing_game():
-    secret = 102
-    guess = 103
-    biggest = 101
-    smallest = -1
-    while guess != secret:
-        g = input("Mark: What is your guess?\nYou: My guess is ")
-        guess = int(g)
-        if biggest > guess and smallest < guess:
-            if biggest - smallest == 2:
-                secret = smallest + 1
-            if guess - smallest < biggest - guess:
-                smallest = guess
-                print("Mark: Try bigger!")
-            elif guess - smallest > biggest - guess:
-                biggest = guess
-                print("Mark: Try smaller!")
-            else:
-                choice = randint(0,1)
-                if choice == 1:
-                    biggest = guess
-                    if secret > 100:
-                        print("Mark: Try smaller!")
-                else:
-                    smallest = guess
-                    if secret > 100:
-                        print("Mark: Try bigger!")
+def highest():
+    while True:
+        try:
+            num = int(input("I want the range between 1 and "))
+        except ValueError:
+            print("That is definitely not a number.")
+            continue
+        if num < 2:
+            print("The highest number must be at least 2!")
         else:
-            print("Mark: What? I try to help and... Ah! You are hopeless...")
-    print("Mark: You finally got it... Huh. WOW! You are as fast as walk of snails!")
+            print("Mark: Guess the correct number between 0 and " + str(num) + " to win!")
+            secret = random.randrange(1, num)
+            return secret
 
-print("Mark: Welcome to my guessing game! Guess the correct number between 0 and 100 to win!")
-smallest = 0
-biggest = 100
+def guessing_game(life):
+    secret = highest()
+    guess = -1
+    while guess != secret:
+        if life == 0:
+            print("Mark: You are out of lives! You lost.\nThe correct number was " + str(secret) + ".")
+            break
+        while True:
+            try:
+                guess = int(input("Mark: What is your guess?\nMe: My guess is "))
+            except ValueError:
+                print("That is definitely not a number.")
+                continue
+            if guess < 0:
+                print("The guess must be a positive number!")
+            else:
+                break
+        if guess < secret:
+            life -= 1
+            print("Mark: Try bigger! You have " + str(life) + " lives left")
+        elif guess > secret:
+            life -= 1
+            print("Mark: Try smaller! You have " + str(life) + " lives left")
+        else:
+            print("Mark: You won!")
+
+print("Mark: Welcome to my guessing game!")
 restart = True
 while restart:
-    guessing_game()
-    ans = input("Mark: Can you beat me faster (yes/no)?\nYou:")
+    while True:
+        try:
+            life = int(input("How many lives do you want?\nMe: "))
+        except ValueError:
+            print("That is definitely not a number.")
+            continue
+        if life < 1:
+            print("You must have at least 1 life!")
+        else:
+            break
+    guessing_game(life)
+    ans = input("Mark: Can you beat me faster (yes/no)?\nMe: ")
     if not ans.lower().startswith("y"):
         restart = False
     if restart:
