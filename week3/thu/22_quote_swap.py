@@ -7,12 +7,12 @@
 
 words = ["What", "I", "do", "create,", "I", "cannot", "not", "understand."]
 
-def quote_swap(w):
-    do = w.index("do")
-    cannot = w.index("cannot")
-    w[do] = "cannot"
-    w[cannot] = "do"
-    return w
+def quote_swap(words): #kiirni
+    do = words.index("do")
+    cannot = words.index("cannot")
+    words[do] = "cannot"
+    words[cannot] = "do"
+    return words
 
 print(quote_swap(words))
 # Expected output: "What I cannot create I do not understand."

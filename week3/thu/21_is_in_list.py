@@ -5,7 +5,6 @@
 list_of_numbers = [2, 4, 6, 8, 10, 12, 14, 16]
 
 def check_nums(nums):
-    if all(x in nums for x in [4, 8, 12, 16]):
-        return True
+    return all(x in nums for x in [4, 8, 12, 16])
 
 print(check_nums(list_of_numbers))

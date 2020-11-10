@@ -4,10 +4,9 @@ numbers = [1, 2, 3, 4, 5, 6, 8]
 
 def contains_seven(num):
     if 7 in num:
-        res = "Hoorrray!"
+        return "Hoorrray!"
     else:
-        res = "Noooooo"
-    return res
+        return "Noooooo"
 
 print(contains_seven(numbers))
 # The output should be: "Noooooo"

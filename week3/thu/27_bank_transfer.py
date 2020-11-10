@@ -7,10 +7,10 @@ accounts = [
 # Create function that returns the name and balance of cash on an account in a list
 def get_name_and_balance(a, num):
     for item in a:
-        for i in item:
-            if i == 'account_number' and num == item[i]:
-                print(item['client_name'] + ",", item['balance'])
+        if item['account_number'] == num:
+            print(item['client_name'] + ",", item['balance'])
 
+#egyszerusitve!
 get_name_and_balance(accounts, 11234543)
 
 # The output should be: "Igor", "203004099.2"
@@ -27,18 +27,15 @@ get_name_and_balance(accounts, 11234543)
 def transfer_amount(_from, _to, amount):
     account_numbers = []
     for item in accounts:
-        for i in item:
-            if i == 'account_number':
-                account_numbers.append(item[i])
+        account_numbers.append(item['account_number'])
     if _from not in account_numbers or _to not in account_numbers:
         print("404 - account not found")
     else:
         for item in accounts:
-            for i in item:
-                if i == 'account_number' and item[i] == _from:
-                    item['balance'] -= amount
-                elif i == 'account_number' and item[i] == _to:
-                    item['balance'] += amount
+            if item ['account_number'] == _from:
+                item['balance'] -= amount
+            elif item ['account_number'] == _to:
+                item['balance'] += amount
         print(accounts)
 
 

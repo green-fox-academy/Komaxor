@@ -5,10 +5,8 @@ shop_items = ["Cupcake", 2, "Brownie", False]
 # No, don't just remove the items :)
 # Create a function called sweets() which takes the list as a parameter.
 def sweets(items):
-    _2 = items.index(2)
-    _False = items.index(False)
-    items[_2] = "Croissant"
-    items[_False] = "Ice cream"
+    items[items.index(2)] = "Croissant"
+    items[items.index(False)] = "Ice cream"
     return items
 
 print(sweets(shop_items))

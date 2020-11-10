@@ -10,7 +10,6 @@ def divider():
             return res
         except ValueError:
             print("You must enter a number")
-            continue
         except ZeroDivisionError:
             print("fail if the parameter is 0")
 

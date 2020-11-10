@@ -5,13 +5,13 @@
 girls = ["Eve", "Ashley", "Claire", "Kat", "Jane"]
 boys = ["Joe", "Fred", "Tom", "Todd", "Neef", "Jeff"]
 
-def making_matches(g, b):
+def making_matches(girls, boys): #kiirni
     res = []
-    for i in range(0, len(g) + len(b)):
-        if i < len(g):
-            res.append(g[i])
-        if i < len(b):
-            res.append(b[i])
+    for i in range(0, len(girls) + len(boys)):
+        if i < len(girls):
+            res.append(girls[i])
+        if i < len(boys):
+            res.append(boys[i])
     return res
 
 print(making_matches(girls, boys))

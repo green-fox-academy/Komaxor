@@ -4,9 +4,9 @@
 planet_list = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Uranus", "Neptune"]
 # Expected output: "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"
 
-def put_saturn(l):
-    index = l.index("Jupiter", )
-    l.insert(index + 1, "Saturn")
-    return l
+def put_saturn(planet_list):
+    index = planet_list.index("Jupiter", )
+    planet_list.insert(index + 1, "Saturn")
+    return planet_list
 
 print(put_saturn(planet_list))

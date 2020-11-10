@@ -26,11 +26,11 @@ def user_input():
         if words[0] not in ["+", "-", "*", "/", "%"]:
             print("The first word shuld be your operation sign")
             continue
-        if words[1].isdigit() == False:
+        if not words[1].isdigit():
             print(words[1])
             print("The second word shuld be a number")
             continue
-        if words[2].isdigit() == False:
+        if not words[2].isdigit():
             print("The third word shuld be a number")
             continue
         else:
@@ -41,15 +41,14 @@ def calculate():
     num1 = int(words[1])
     num2 = int(words[2])
     if words[0] == "+":
-        res = num1 + num2
+        return num1 + num2
     elif words[0] == "-":
-        res = num1 - num2
+        return num1 - num2
     elif words[0] == "*":
-        res = num1 * num2
+        return num1 * num2
     elif words[0] == "/":
-        res = num1 / num2
+        return num1 / num2
     elif words[0] == "%":
-        res = num1 % num2
-    return res
+        return num1 % num2
 
 print(calculate())

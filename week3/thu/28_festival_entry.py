@@ -24,14 +24,12 @@ queue = [
 
 def check(loot):
     for item in queue:
-        for i in item:
-            if i == 'alcohol':
-                loot += item[i]
-                item[i] = 0
-            if i == 'guns' and item[i] != 0:
-                watchlist.append(item['name'])
-    print(loot) #NOTE return or not?
-    #return loot
+        loot += item['alcohol']
+        if item['guns'] != 0:
+            watchlist.append(item['name'])
+    #print(loot)
+    return loot
 
-check(security_alcohol_loot)
+print(check(security_alcohol_loot))
+#check(security_alcohol_loot)
 print(watchlist)
