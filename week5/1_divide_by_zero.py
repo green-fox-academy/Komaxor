@@ -8,7 +8,6 @@ def divider():
             num = int(input("Enter a number! "))
             res = 10 / num
             return res
-            break
         except ValueError:
             print("You must enter a number")
             continue

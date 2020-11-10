@@ -2,12 +2,12 @@
 # each line from the file.
 # If the program is unable to read the file (for example it does not exist),
 # then it should print the following error message: "Unable to read file: my-file.txt"
-import os
-
-file = open('my-file.txt', 'r') #TODO does not file file
+file = open('myfile.txt', 'r') #TODO does not find file
+print(file.read())
 
 while True:
     try:
         print(file.readlines())
-    except FileNotFoundError: #TODO does not work porbably same reason as previous
+        break
+    except FileNotFoundError: #TODO does not work
         print("Unable to read file: ", file)
