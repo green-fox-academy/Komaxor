@@ -2,7 +2,7 @@
 # each line from the file.
 # If the program is unable to read the file (for example it does not exist),
 # then it should print the following error message: "Unable to read file: my-file.txt"
-file_name = 'myfile.txt'
+file_name = 'week5/myfile.txt'
 
 try:
     file = open(file_name, 'r')

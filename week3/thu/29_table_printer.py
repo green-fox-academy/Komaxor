@@ -24,20 +24,30 @@ ingredients = [
 	{ "name": "soda", "in_stock": 0, "needs_cooling": True }
 ]
 
-def table_printer():
-    #length of first column
-    char = 12
+second_col_len = 15
+third_col_len = 10
+
+def get_first_col_len():
+    first_col_len = 12
     chars = []
     for item in ingredients:
         length = len(item['name'])
         chars.append(length)
         if max(chars) > 10:
-            char = max(chars)
+            first_col_len = max(chars)
+    return first_col_len
 
-#print table
-    print("+" + char * "-" + "--" + "+" + 15 * "-" + "+" + 10 * "-" + "+")
-    print("| Ingredient "  + (char - 10) * " " + "| Needs cooling | In stock |")
-    print("+" + char * "-" + "--" + "+" + 15 * "-" + "+" + 10 * "-" + "+")
+def table_edge(first_col_len):
+      print("+" + first_col_len * "-" + "--" + "+" + second_col_len * "-"
+      + "+" + third_col_len * "-" + "+")
+
+def table_printer():
+    first_col_len = get_first_col_len()
+    table_edge(first_col_len)
+    print("| Ingredient "  + (first_col_len - 10) * " "
+    + "| Needs cooling | In stock |")
+    print("+" + first_col_len * "-" + "--" + "+" + second_col_len * "-"
+    + "+" + third_col_len * "-" + "+")
     for item in ingredients:
         if item['needs_cooling']:
             cooling = "Yes"
@@ -47,7 +57,9 @@ def table_printer():
             stock = "-"
         else:
             stock = str(item['in_stock'])
-        print("| " + item['name'] + (char - len(item['name'])) * " " + " | " + cooling + (15 - len(cooling) - 1) * " " + "| " + stock + (10 - len(stock) - 1) * " " + "|")
-    print("+" + char * "-" + "--" + "+" + 15 * "-" + "+" + 10 * "-" + "+")
+        print("| " + item['name'] + (first_col_len - len(item['name'])) * " "
+        + " | " + cooling + (second_col_len - len(cooling) - 1) * " " + "| "
+        + stock + (third_col_len - len(stock) - 1) * " " + "|")
+    table_edge(first_col_len)
 
 table_printer()
