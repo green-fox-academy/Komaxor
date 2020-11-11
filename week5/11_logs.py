@@ -5,9 +5,6 @@
 
 log_file = 'week5/log.txt'
 
-with open(log_file, 'r') as file:
-    lines = file.readlines()
-
 def get_ips(log):
     with open(log_file, 'r') as file:
         lines = file.readlines()
