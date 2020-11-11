@@ -16,7 +16,7 @@ def add_name(myfile):
         return 1
     except FileNotFoundError:
         return 2
-    except IOError:
+    except IOError: #error valtozo
         return str("Unable to write file: " + myfile)
 
 add_name(myfile)

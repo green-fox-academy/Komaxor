@@ -5,8 +5,6 @@ def decrypt(file_name):
     with open(file_name, 'r') as file:
         lines = file.readlines()
         for line in reversed(lines):
-            print(line)
+            print(line, end="")
 
 decrypt(reversed_file)
-
-#TODO why double linebreaks

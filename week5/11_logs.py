@@ -29,4 +29,4 @@ def get_or_post(log):
         return gp_ratio
 
 get_ips(log_file)
-print(get_or_post(log_file))
+print(round(get_or_post(log_file), 2))

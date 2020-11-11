@@ -6,7 +6,9 @@ def decrypt(file_name):
     with open(file_name, 'r') as file:
         content = file.read()
         for ch in content:
-            if ch.isalpha:
+            if ch == "\n" or ch == " ":
+                cipherText += ch
+            else:
                 new_ch = ord(ch) - 1
                 current_ch = chr(new_ch)
                 cipherText += current_ch
