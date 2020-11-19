@@ -1,6 +1,0 @@
-[ ] One
-[ ] Two
-[x] Three
-[ ] Four
-[ ] Five
-[ ] Six
