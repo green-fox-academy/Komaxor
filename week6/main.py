@@ -46,9 +46,18 @@ def add_task(task):
     except IOError:
         return "IO error"
 
+def remove_task():
+    #open task file for reading
+    with open("tasks.txt", 'r') as file:
+        #read all lines
+        lines = file.readlines()
+        #index out of range error
+        if int(sys.argv[2]) > len(lines):
+            print("Unable to remove: index is out of bound")
+        file.close()
 #print(sys.argv)
 
-arguments = ['-l', '-a']
+arguments = ['-l', '-a', 'r']
 #prints commands
 if len(sys.argv) == 1:
     print_usage()
@@ -67,9 +76,25 @@ elif len(sys.argv) == 2 and sys.argv[1] == "-a":
 #add multiple tasks error
 elif len(sys.argv) > 3 and sys.argv[1] == "-a":
     print("You can only add one task at a time.")
-    print("To add multiple words as one task, put them in quotation marks")
+    print("To add multiple words as one task, put them in quotation marks.")
+#remove task
+elif (len(sys.argv) == 3 and sys.argv[1] == "-r" and
+        sys.argv[2].isdigit()):
+    remove_task()
+#remove error not number
+elif (len(sys.argv) == 3 and sys.argv[1] == "-r" and
+        not sys.argv[2].isdigit()):
+    print("Unable to remove: index is not a number")
+#remove task no index
+elif len(sys.argv) == 2 and sys.argv[1] == "-r":
+    print("Unable to remove: no index provided")
+#remove multiple
+elif len(sys.argv) > 3 and sys.argv[1] == "-r":
+    print("You can only remove 1 task at a time.")
+#unsupported argument
 elif sys.argv[0] not in arguments:
     print("Unsupported argument")
     print_usage()
+#unknown error
 else:
     print("Unknown error")
