@@ -109,18 +109,18 @@ def check_task():
         #open task file for writing
         try:
             with open("tasks.txt", 'w') as file:
-            #remove the task with the given index from file
+            #chesck the task with the given index from file
                 num = 1
                 for line in lines:
                     if line[num] != line[int(sys.argv[2])]:
-                        file.write(line)
+                            file.write(line)
                     else:
                         if line[1] == "x":
-                            line = line.strip("\n")
-                            file.write("[ ]" + line[2:])
+                            line = line.replace("x", " ", 1) #file.write("[ ]" + line[2:])
+                            file.write(line)
                         elif line[1] == " ":
-                            line = line.strip("\n")
-                            file.write("[x]" + line[2:])
+                            line = line.replace(" ", "x", 1) #file.write("[ ]" + line[2:])
+                            file.write(line)
                         else:
                             print("Unexpectedd error when checking the file")
                     num += 1
