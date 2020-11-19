@@ -3,13 +3,13 @@ import sys
 def print_usage():
     print("$ todo\n\nCommand Line Todo application\n")
     print("=============================\n\nCommand line arguments\n")
-    print("    -l   Lists all the tasks\n    -a   Adds a new task")
-    print("    -r   Removes a task\n    -c   Completes a task")
+    print("\t-l\tLists all the tasks\n\t-a\tAdds a new task")
+    print("\t-r\tRemoves a task\n\t-c\tCompletes a task")
 
 def get_tasks():
     #open task file for reading
     try:
-        with open("tasks.txt", 'r') as file:
+        with open(".tasks.txt", 'r') as file:
             #read all lines
             lines = file.readlines()
             #remove linebreaks
@@ -17,7 +17,6 @@ def get_tasks():
             for i in range(len(lines)):
                 tasks.append(lines[i].replace("\n", ""))
                 tasks = list(filter(None, tasks))
-            print(tasks)
             file.close()
             return tasks
     #handle exceptions
@@ -31,7 +30,7 @@ def get_tasks():
 def set_tasks(tasks):
     #open task file for writing
     try:
-        with open("tasks.txt", 'w') as file:
+        with open(".tasks.txt", 'w') as file:
             #write tasks in file
             for task in tasks:
                 file.write(task + "\n")
@@ -59,7 +58,7 @@ def add_task(task):
     #get tasks
     tasks = get_tasks()
     #add new task
-    tasks.append(task)
+    tasks.append("[ ] " + task)
     set_tasks(tasks)
 
 def remove_task():
@@ -75,9 +74,18 @@ def check_task():
     if int(sys.argv[2]) > len(tasks):
         print("Unable to check: index is out of bound")
     else:
-        set_tasks(tasks)
-
-#print(sys.argv)
+        checked_tasks = []
+        checked_task = tasks[int(sys.argv[2]) - 1]
+        if checked_task[1] == "x":
+            checked_task = checked_task.replace("x", " ", 1)
+        elif checked_task[1] == " ":
+            checked_task = checked_task.replace(" ", "x", 1)
+        for i in range(len(tasks)):
+            if i != int(sys.argv[2]) - 1:
+                checked_tasks.append(tasks[i])
+            else:
+                checked_tasks.append(checked_task)
+        set_tasks(checked_tasks)
 
 arguments = ['-l', '-a', 'r', 'c']
 #prints commands
