@@ -46,8 +46,9 @@ def add_task(task):
     except IOError:
         return "IO error"
 
-print(sys.argv)
+#print(sys.argv)
 
+arguments = ['-l', '-a']
 #prints commands
 if len(sys.argv) == 1:
     print_usage()
@@ -65,4 +66,10 @@ elif len(sys.argv) == 2 and sys.argv[1] == "-a":
     print("Unable to add: no task provided")
 #add multiple tasks error
 elif len(sys.argv) > 3 and sys.argv[1] == "-a":
-    print("You can only add one task at a time")
+    print("You can only add one task at a time.")
+    print("To add multiple words as one task, put them in quotation marks")
+elif sys.argv[0] not in arguments:
+    print("Unsupported argument")
+    print_usage()
+else:
+    print("Unknown error")
