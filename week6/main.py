@@ -2,9 +2,12 @@ import sys
 
 def print_usage():
     print("$ todo\n\nCommand Line Todo application\n")
-    print("=============================\n\nCommand line arguments\n")
-    print("\t-l\tLists all the tasks\n\t-a\tAdds a new task")
-    print("\t-r\tRemoves a task\n\t-c\tCompletes a task")
+    print("=============================\n\nCommand line arguments:")
+    print("\t-l\tLists all the tasks")
+    print("\t-a\tAdds a new task")
+    print("\t-r\tRemoves a task")
+    print("\t-c\tCompletes a task")
+    print("\t-m\tModifies a task")
 
 def get_tasks():
     #open task file for reading
@@ -80,6 +83,8 @@ def check_task():
             checked_task = checked_task.replace("x", " ", 1)
         elif checked_task[1] == " ":
             checked_task = checked_task.replace(" ", "x", 1)
+        else:
+            print("Corrupted file")
         for i in range(len(tasks)):
             if i != int(sys.argv[2]) - 1:
                 checked_tasks.append(tasks[i])
@@ -87,7 +92,26 @@ def check_task():
                 checked_tasks.append(checked_task)
         set_tasks(checked_tasks)
 
-arguments = ['-l', '-a', 'r', 'c']
+def modify_task():
+    tasks = get_tasks()
+    if int(sys.argv[2]) > len(tasks):
+        print("Unable to modify: index is out of bound")
+    else:
+        modified_tasks = []
+        if tasks[int(sys.argv[2]) - 1][1] == "x":
+            modified_task = "[x] " + sys.argv[3]
+        elif tasks[int(sys.argv[2]) - 1][1] == " ":
+            modified_task = "[ ] " + sys.argv[3]
+        else:
+            print("Corrupted file")
+        for i in range(len(tasks)):
+            if i != int(sys.argv[2]) - 1:
+                modified_tasks.append(tasks[i])
+            else:
+                modified_tasks.append(modified_task)
+        set_tasks(modified_tasks)
+
+arguments = ['-l', '-a', 'r', 'c', 'm']
 #prints commands
 if len(sys.argv) == 1:
     print_usage()
@@ -96,13 +120,13 @@ elif len(sys.argv) == 2 and sys.argv[1] == "-l":
     list_tasks()
 #list tasks more
 elif len(sys.argv) > 2 and sys.argv[1] == "-l":
-    print("-l does not have any extensions")
+    print("-l does not have any arguments.")
 #add new task
 elif len(sys.argv) == 3 and sys.argv[1] == "-a":
     add_task(sys.argv[2])
 #add new task error handling
 elif len(sys.argv) == 2 and sys.argv[1] == "-a":
-    print("Unable to add: no task provided")
+    print("Unable to add: no task provided.")
 #add multiple tasks error
 elif len(sys.argv) > 3 and sys.argv[1] == "-a":
     print("You can only add one task at a time.")
@@ -114,10 +138,10 @@ elif (len(sys.argv) == 3 and sys.argv[1] == "-r" and
 #remove error not number
 elif (len(sys.argv) == 3 and sys.argv[1] == "-r" and
         not sys.argv[2].isdigit()):
-    print("Unable to remove: index is not a number")
+    print("Unable to remove: index is not a number.")
 #remove task no index
 elif len(sys.argv) == 2 and sys.argv[1] == "-r":
-    print("Unable to remove: no index provided")
+    print("Unable to remove: no index provided.")
 #remove multiple
 elif len(sys.argv) > 3 and sys.argv[1] == "-r":
     print("You can only remove 1 task at a time.")
@@ -128,13 +152,30 @@ elif (len(sys.argv) == 3 and sys.argv[1] == "-c" and
 #check error not number
 elif (len(sys.argv) == 3 and sys.argv[1] == "-c" and
         not sys.argv[2].isdigit()):
-    print("Unable to check: index is not a number")
+    print("Unable to check: index is not a number.")
 #check task no index
 elif len(sys.argv) == 2 and sys.argv[1] == "-c":
-    print("Unable to check: no index provided")
+    print("Unable to check: no index provided.")
 #remove multiple
 elif len(sys.argv) > 3 and sys.argv[1] == "-c":
     print("You can only check 1 task at a time.")
+#modify task
+elif (len(sys.argv) == 4 and sys.argv[1] == "-m" and
+        sys.argv[2].isdigit()):
+    modify_task()
+#modify error not number
+elif (len(sys.argv) == 4 and sys.argv[1] == "-m" and
+        not sys.argv[2].isdigit()):
+    print("Unable to modify: index is not a number.")
+#modify task no index
+elif len(sys.argv) == 2 and sys.argv[1] == "-m":
+    print("Unable to modify: no index provided.")
+#modify one argument missing
+elif len(sys.argv) == 3 and sys.argv[1] == "-m":
+    print("The index or the task is missing.")
+#modify too many arguments
+elif len(sys.argv) > 4 and sys.argv[1] == "-m":
+    print("Too many arguments given. Enter the index then the task")
 #unsupported argument
 elif sys.argv[0] not in arguments:
     print("Unsupported argument")

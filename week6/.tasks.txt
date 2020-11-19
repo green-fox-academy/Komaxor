@@ -1,4 +1,4 @@
 [ ] one
-[x] two
+[ ] two
 [ ] three
-[ ] four
+[x] four
