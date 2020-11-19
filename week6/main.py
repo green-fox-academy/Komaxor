@@ -6,24 +6,21 @@ def print_usage():
     print("    -l   Lists all the tasks\n    -a   Adds a new task")
     print("    -r   Removes a task\n    -c   Completes a task")
 
-def list_tasks():
+def get_tasks():
     #open task file for reading
     try:
         with open("tasks.txt", 'r') as file:
             #read all lines
             lines = file.readlines()
-            #no todos
-            if len(lines) == 0:
-                print("No todos for today! :)")
-            #print lines
-            else:
-                i = 1
-                for line in lines:
-                    line = line.strip("\n")
-                    print(str(i) + " - " + line)
-                    i += 1
-                file.close()
-    #handle file missing exception
+            #remove linebreaks
+            tasks = []
+            for i in range(len(lines)):
+                tasks.append(lines[i].replace("\n", ""))
+                tasks = list(filter(None, tasks))
+            print(tasks)
+            file.close()
+            return tasks
+    #handle exceptions
     except NameError:
         return "Name error"
     except FileNotFoundError:
@@ -31,14 +28,15 @@ def list_tasks():
     except IOError:
         return "IO error"
 
-def add_task(task):
+def set_tasks(tasks):
     #open task file for writing
     try:
-        with open("tasks.txt", 'a') as file:
-        #append the new task to the end of the file
-            file.write("\n" + task)
+        with open("tasks.txt", 'w') as file:
+            #write tasks in file
+            for task in tasks:
+                file.write(task + "\n")
             file.close()
-    #handle file missing exception
+    #handle exceptions
     except NameError:
         return "Name error"
     except FileNotFoundError:
@@ -46,15 +44,33 @@ def add_task(task):
     except IOError:
         return "IO error"
 
+def list_tasks():
+    tasks = get_tasks()
+    if len(tasks) == 0:
+        print("No todos for today! :)")
+    #print tasks with numbers attached
+    else:
+        current_task = 1
+        for task in tasks:
+            print(str(current_task) + " - " + task)
+            current_task += 1
+
+def add_task(task):
+    #get tasks
+    tasks = get_tasks()
+    #add new task
+    tasks.append(task)
+    set_tasks(tasks)
+
 def remove_task():
-    #open task file for reading
-    with open("tasks.txt", 'r') as file:
-        #read all lines
-        lines = file.readlines()
-        #index out of range error
-        if int(sys.argv[2]) > len(lines):
-            print("Unable to remove: index is out of bound")
-        file.close()
+    tasks = get_tasks()        #index out of range error
+    if int(sys.argv[2]) > len(tasks):
+        print("Unable to remove: index is out of bound")
+    else:
+        tasks.remove(tasks[int(sys.argv[2]) - 1])
+    set_tasks(tasks)        #remove the task with the given index from file
+
+
 #print(sys.argv)
 
 arguments = ['-l', '-a', 'r']
