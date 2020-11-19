@@ -70,10 +70,16 @@ def remove_task():
         tasks.remove(tasks[int(sys.argv[2]) - 1])
     set_tasks(tasks)        #remove the task with the given index from file
 
+def check_task():
+    tasks = get_tasks()        #index out of range error
+    if int(sys.argv[2]) > len(tasks):
+        print("Unable to check: index is out of bound")
+    else:
+        set_tasks(tasks)
 
 #print(sys.argv)
 
-arguments = ['-l', '-a', 'r']
+arguments = ['-l', '-a', 'r', 'c']
 #prints commands
 if len(sys.argv) == 1:
     print_usage()
@@ -107,6 +113,20 @@ elif len(sys.argv) == 2 and sys.argv[1] == "-r":
 #remove multiple
 elif len(sys.argv) > 3 and sys.argv[1] == "-r":
     print("You can only remove 1 task at a time.")
+#check task
+elif (len(sys.argv) == 3 and sys.argv[1] == "-c" and
+        sys.argv[2].isdigit()):
+    check_task()
+#check error not number
+elif (len(sys.argv) == 3 and sys.argv[1] == "-c" and
+        not sys.argv[2].isdigit()):
+    print("Unable to check: index is not a number")
+#check task no index
+elif len(sys.argv) == 2 and sys.argv[1] == "-c":
+    print("Unable to check: no index provided")
+#remove multiple
+elif len(sys.argv) > 3 and sys.argv[1] == "-c":
+    print("You can only check 1 task at a time.")
 #unsupported argument
 elif sys.argv[0] not in arguments:
     print("Unsupported argument")
