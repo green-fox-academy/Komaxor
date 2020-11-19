@@ -31,6 +31,21 @@ def list_tasks():
     except IOError:
         return "IO error"
 
+def add_task(task):
+    #open task file for writing
+    try:
+        with open("tasks.txt", 'a') as file:
+        #append the new task to the end of the file
+            file.write("\n" + task)
+            file.close()
+    #handle file missing exception
+    except NameError:
+        return "Name error"
+    except FileNotFoundError:
+        return "File is missing"
+    except IOError:
+        return "IO error"
+
 print(sys.argv)
 
 #prints commands
@@ -39,3 +54,15 @@ if len(sys.argv) == 1:
 #list tasks
 elif len(sys.argv) == 2 and sys.argv[1] == "-l":
     list_tasks()
+#list tasks more
+elif len(sys.argv) > 2 and sys.argv[1] == "-l":
+    print("-l does not have any extensions")
+#add new task
+elif len(sys.argv) == 3 and sys.argv[1] == "-a":
+    add_task(sys.argv[2])
+#add new task error handling
+elif len(sys.argv) == 2 and sys.argv[1] == "-a":
+    print("Unable to add: no task provided")
+#add multiple tasks error
+elif len(sys.argv) > 3 and sys.argv[1] == "-a":
+    print("You can only add one task at a time")
