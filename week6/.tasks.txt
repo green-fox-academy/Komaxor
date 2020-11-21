@@ -1,4 +1,8 @@
-[ ] one
-[ ] two
-[ ] three
-[x] four
+[x] Plan git commits
+[x] Write code
+[x] Use meaningful comments in the code
+[x] Test every scenario
+[x] Fix bugs
+[x] Add cool modify feaature
+[x] Test again
+[ ] Write documentation
