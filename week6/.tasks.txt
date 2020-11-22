@@ -5,4 +5,4 @@
 [x] Fix bugs
 [x] Add cool modify feaature
 [x] Test again
-[ ] Write documentation
+[x] Write documentation
