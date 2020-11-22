@@ -79,7 +79,7 @@ def remove_task():
         #remove task from list
         tasks.remove(tasks[int(sys.argv[2]) - 1])
     #enter the tasks in the file
-    set_tasks(tasks)        #remove the task with the given index from file
+    set_tasks(tasks)
 
 def check_task():
     #get to do list
