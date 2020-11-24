@@ -6,3 +6,4 @@
 [x] Add cool modify feaature
 [x] Test again
 [x] Write documentation
+[x] Present to J
