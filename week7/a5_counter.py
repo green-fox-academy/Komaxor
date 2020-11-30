@@ -24,3 +24,4 @@ class Counter(object):
     def reset(self):
         self.field = 0
 
+#TODO TypeError: Counter() takes no arguments
