@@ -8,3 +8,19 @@
 #Check if everything is working fine with the proper test
 #Download test_counter.py and place it next to your solution
 #Run the test file as a usual python program
+
+class Counter(object):
+    field = 0
+
+    def add(self, number):
+        self.field += number
+
+    def add_unit(self):
+        self.field += 1
+
+    def get(self):
+        return self.field
+
+    def reset(self):
+        self.field = 0
+
