@@ -7,7 +7,7 @@
 #a pink with black text: "Awesome"
 #a yellow with green text: "Superb!"
 
-class PostIt():
+class PostIt(object):
     background_color = ''
     text = ''
     text_color = ''
