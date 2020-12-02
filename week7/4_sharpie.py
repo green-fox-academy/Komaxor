@@ -5,7 +5,7 @@
 #We can use() the sharpie objects
 #which decreases inkAmount
 
-class Sharpie(object):
+class Sharpie:
     color = ''
     width = 0.0
     ink_amount = 0.0

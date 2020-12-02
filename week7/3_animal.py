@@ -6,7 +6,7 @@
 #Every animal can drink() which decreases their thirst by one
 #Every animal can play() which increases both by one
 
-class Animal(object):
+class Animal:
     hunger = 50
     thirst = 50
 

@@ -9,7 +9,7 @@
 #Download test_counter.py and place it next to your solution
 #Run the test file as a usual python program
 
-class Counter(object):
+class Counter:
     field = 0
 
     def add(self, number):

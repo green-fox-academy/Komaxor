@@ -1,4 +1,4 @@
-class Pokemon(object):
+class Pokemon:
     def __init__(self, name, type, effectiveAgainst):
         self.name = name
         self.type = type
