@@ -30,12 +30,8 @@ wildPokemon = Pokemon("Oddish", "leaf", "water")
 
 # Which pokemon should Ash use?
 
-def choose(pokemon, enemy):
-    print(pokemon)
-    for monster in pokemon:
+for monster in pokemon:
+    if monster.isEffectiveAgainst(wildPokemon):
         print(monster)
-        #if monster[2] == 'leaf' and monster[1] != 'water':
-            #print(monster)
 
-choose(pokemon, wildPokemon)
 print("I choose you, ")

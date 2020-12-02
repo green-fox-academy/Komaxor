@@ -22,8 +22,8 @@ class DiceSet:
         else:
             self.roll()
 
-
 dice_set = DiceSet()
+
 print(dice_set.get_current())
 dice_set.roll()
 print(dice_set.get_current())
@@ -31,7 +31,17 @@ dice_set.reroll(3)
 print(dice_set.get_current(3))
 print(dice_set.get_current())
 
+def all_equal(dice_set):
+    while True:
+        dice_set.roll()
+        print(dice_set.get_current())
+        if len(set(dice_set.get_current())) <= 1 and dice_set.get_current()[0] == 6:
+            print(dice_set)
+            break
+        else:
+            dice_set.reroll()
 
+all_equal(dice_set)
 # - You have a `DiceSet` class which has 6 dices
 # - You can roll all of them with `roll()`
 # - Check the current rolled numbers with `get_current()`
