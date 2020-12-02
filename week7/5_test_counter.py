@@ -11,7 +11,7 @@ class TestCounter(unittest.TestCase):
         self.assertEqual(self.c.get(), 5)
 
     def test_addOne(self):
-        self.c.add_unit()
+        self.c.add()
         self.assertEqual(self.c.get(), 1)
 
     def test_getZero(self):
@@ -22,7 +22,7 @@ class TestCounter(unittest.TestCase):
         self.assertEqual(c.get(), 7)
 
     def test_resetToZero(self):
-        self.c.add_unit()
+        self.c.add()
         self.c.reset()
         self.assertEqual(self.c.get(), 0)
 

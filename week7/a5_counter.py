@@ -12,11 +12,11 @@
 class Counter:
     field = 0
 
-    def add(self, number):
-        self.field += number
-
-    def add_unit(self):
-        self.field += 1
+    def add(self, number = None):
+        if number != None:
+            self.field += number
+        else:
+            self.field += 1
 
     def get(self):
         return self.field
