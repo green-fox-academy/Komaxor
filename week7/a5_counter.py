@@ -22,6 +22,8 @@ class Counter:
         return self.field
 
     def reset(self):
-        self.field = 0
+        self.field = self.number
 
-#TODO TypeError: Counter() takes no arguments
+    def __init__(self, number = 0):
+        self.number = number
+        self.field = number

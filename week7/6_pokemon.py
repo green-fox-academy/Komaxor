@@ -32,6 +32,6 @@ wildPokemon = Pokemon("Oddish", "leaf", "water")
 
 for monster in pokemon:
     if monster.isEffectiveAgainst(wildPokemon):
-        print(monster)
+        print(monster.name)
 
 print("I choose you, ")

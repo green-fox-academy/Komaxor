@@ -19,9 +19,11 @@ postit3 = PostIt()
 postit1.background_color = 'orange'
 postit1.text = 'Idea 1'
 postit1.text_color = 'blue'
+
 postit2.background_color = 'pink'
 postit2.text = 'Awesome'
 postit2.text_color = 'black'
+
 postit3.background_color = 'yellow'
 postit3.text = 'Superb'
 postit3.text_color = 'green'
