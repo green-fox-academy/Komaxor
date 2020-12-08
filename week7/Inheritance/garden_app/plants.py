@@ -8,4 +8,7 @@ class Plant:
         self.absorption_rate = 0.0
 
     def getStatus(self):
-        print(self.color + self.type)
+        if self.water_level <= self.needs_water_at:
+            print("The " + self.color + " " + self.type + " needs water")
+        else:
+            print("The " + self.color + " " + self.type + " does not need water")

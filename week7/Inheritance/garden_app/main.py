@@ -14,14 +14,12 @@ garden.add(blue_flower)
 print(garden.getStatus())
 
 print(purple_tree.water_level)
-print(purple_tree.needs_water_at)
 
 garden.water(40)
 
 print(purple_tree.water_level)
-print(purple_tree.needs_water_at)
 
 garden.water(70)
 
 print(purple_tree.water_level)
-print(purple_tree.needs_water_at)
+print(garden.getStatus())

@@ -14,7 +14,7 @@ class Garden:
         else:
             each_gets = amount / len(needs_water)
             for plant in needs_water:
-                plant.water_level += each_gets
+                plant.water_level += each_gets * plant.absorption_rate
 
     def add(self, plant):
         self.plants.append(plant)
