@@ -1,15 +1,13 @@
 from person import Person
 
 class Mentor(Person):
-    level = ''
+
+    def __init__(self, name = 'Jane Doe', age = 30, gender = 'female', level = 'intermediate'):
+        super().__init__(name, age, gender)
+        self.level = level
 
     def get_goal(self):
         print("Educate brilliant junior software developers.")
 
     def introduce(self):
-        super().introduce()
-        print(self.level + "mentor.")
-
-    def __init__(self, name, age, gender, level):
-        super().__init__(name, age, gender)
-        level = 'intermediate'
+        print(super().common_introduce() + " " + self.level + " mentor.")

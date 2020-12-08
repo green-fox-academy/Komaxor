@@ -6,6 +6,10 @@ class Cohort:
     students = []
     mentors = []
 
+    def __init__(self, name):
+        self.students = []
+        self.mentors = []
+
     def add_student(self, Student):
         self.students.append(Student)
 
@@ -13,8 +17,4 @@ class Cohort:
         self.mentors.append(Mentor)
 
     def info(self):
-        print("The " + self.name + " cohort has " + len(self.students) + "students and " + len(self.mentors) + "mentors.")
-
-    def __init__(self, name):
-        self.students = []
-        self.mentors = []
+        print("The " + self.name + " cohort has " + str(len(self.students)) + "students and " + str(len(self.mentors)) + "mentors.")

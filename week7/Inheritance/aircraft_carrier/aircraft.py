@@ -6,8 +6,12 @@ class Aircraft:
         self.base_damage = 0
         self.ammo_stock = 0
 
-    def fight(self):
+    def calculate_damage(self):
         damage = self.ammo_stock * self.base_damage
+        return damage
+
+    def fight(self):
+        damage = self.calculate_damage()
         self.ammo_stock = 0
         return damage
 
@@ -25,7 +29,7 @@ class Aircraft:
     def getStatus(self):
         print("Type: " + self.type + ", Ammo: " + str(self.ammo_stock) +
               ", Base damage: " + str(self.base_damage) + ", Total damage: "
-              + str(self.ammo_stock * self.base_damage))
+              + str(self.calculate_damage()))
 
     def isPriority(self):
         if self.type == 'F35':

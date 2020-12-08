@@ -12,7 +12,7 @@ class Carrier:
     def total_damage(self):
         self.total_dmg = 0
         for aircraft in self.aircrafts:
-            self.total_dmg += (aircraft.ammo_stock * aircraft.base_damage)
+            self.total_dmg += (aircraft.calculate_damage())
         return self.total_dmg
 
     def ammo_needed(self):
@@ -47,7 +47,7 @@ class Carrier:
         for aircraft in self.aircrafts:
             another_carrier.health -= aircraft.fight()
         if another_carrier.health <= 0:
-            self.die()
+            another_carrier.die()
 
     def getStatus(self):
         print("HP: " + str(self.health) + ", Aircraft count: " +

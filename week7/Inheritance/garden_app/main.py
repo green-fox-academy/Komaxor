@@ -11,7 +11,7 @@ garden.add(purple_tree)
 garden.add(orange_tree)
 garden.add(blue_flower)
 
-#print(garden.get_Status())
+print(garden.getStatus())
 
 print(purple_tree.water_level)
 print(purple_tree.needs_water_at)

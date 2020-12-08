@@ -33,9 +33,9 @@ for person in people:
     person.introduce()
     person.get_goal()
 
-awesome = LagopusClass('AWESOME')
-awesome.add_student(student);
-awesome.add_student(john);
-awesome.add_mentor(mentor);
-awesome.add_mentor(gandhi);
-awesome.info();
+awesome = Cohort('Awesome')
+awesome.add_student(student)
+awesome.add_student(john)
+awesome.add_mentor(mentor)
+awesome.add_mentor(gandhi)
+awesome.info()

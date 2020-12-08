@@ -19,6 +19,6 @@ class Garden:
     def add(self, plant):
         self.plants.append(plant)
 
-    def get_Status(self):
+    def getStatus(self):
         for plant in self.plants:
-            plant.get_Status()
+            plant.getStatus()
