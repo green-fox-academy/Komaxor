@@ -1,13 +1,14 @@
-from random import randrange
 from monster import Monster
+from PIL import Image
 
 class Boss(Monster):
 
     def __init__(self):
         super().__init__()
         self.level = 1 # = area.number
-        self.max_health = 2 * self.level * randrange(6) + randrange(6)
+        self.max_health = (2 * self.level * super().rng()) + super().rng()
         self.current_health = self.max_health
-        self.def_point = self.level / 2 * randrange(6) + randrange(6) / 2
-        self.strike_point = self.level * randrange(6) + self.level
-        self.on_tile = randrange(1, 100)
+        self.def_point = (self.level / 2 * super().rng()) + (super().rng() / 2)
+        self.strike_point = (self.level * super().rng()) + self.level
+        self.on_tile = super().spawn()
+        self.image = Image.open("assets/boss.png")

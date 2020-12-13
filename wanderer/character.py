@@ -1,4 +1,5 @@
 from area import Area
+from random import randrange
 
 class Character:
 
@@ -10,22 +11,15 @@ class Character:
         self.strike_point = 0
         self.on_tile = 0
 
-    def move(self, direction):
-        self.turn(direction)
-        tile = self.step(direction)
-        if tile.has_hero == tile.has_monster == True:
-            self.fight(defender)
+    def rng(self):
+        return randrange(1, 6)
 
+    def spawn(self):
+        return randrange(2, 100)
 
-    def turn(self, direction):
-        if direction == 'down':
-            pass
-        if direction == 'up':
-            pass
-        if direction == 'right':
-            pass
-        if direction == 'left':
-            pass
+    def move(self, character, direction):
+        character.turn(direction)
+        self.on_tile = self.step(direction)
 
     def step(self, direction):
         if direction == 'down' and self.on_tile < 91:
@@ -39,11 +33,10 @@ class Character:
         return self.on_tile
 
     def fight(self, defender):
-        while True:
-            defender.current_health -= self.strike_point
-            defender.check_death()
-            self.current_health -= defender.strike_point
-            self.check_death()
+        defender.current_health -= self.strike_point
+        defender.check_death()
+        self.current_health -= defender.strike_point
+        self.check_death()
 
     def check_death(self):
         if self.current_health <= 0:
@@ -51,4 +44,4 @@ class Character:
                 print("Monster successfully destroyed!")
             if self.__class__() == 'Hero':
                 print("You died!")
-            del self
+            #area.kill()
