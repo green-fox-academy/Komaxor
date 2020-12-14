@@ -1,5 +1,5 @@
 from random import randrange
-from area import Area
+from area import CreateArea
 from hero import Hero
 from skeleton import Skeleton
 from boss import Boss
@@ -36,27 +36,56 @@ class Game:
                 str(characters[i].current_health) + "/" + str(characters[i].max_health) +
                 " | DP: " + str(characters[i].def_point) + " | SP: " + str(characters[i].strike_point))
 
-    def fight(self, characters):
-        for i in range(1, len(characters)):
-            if characters[0].on_tile == characters[i].on_tile:
-                #create loop until one has lower health than 0
-                characters[0].fight(characters[i])
-                characters[0].check_death()
-                characters[i].check_death()
+    def kill(self, character):
+        del character
 
-    #def check_square(self):
+    def check_fight(self, attacker, defender):
+        if attacker.on_tile == defender.on_tile:
+            self.fight(attacker, defender)
 
+    def fight(self, attacker, defender):
+        while attacker.current_health > 0 and defender.current_health > 0:
+            attacker.hit(defender)
+            attacker.check_death()
+            #prevent defender to hit after it died
+            defender.hit(attacker)
+            defender.check_death()
+        if attacker.current_health <= 0:
+            self.kill(attacker)
+        else:
+            self.kill(defender)
+        #self.check_next_area(characters)
 
-    def start_area(self):
-        area = Area()
-        tiles = area.create_walls()
-        characters = self.create_characters()
+    def spawn_characters(self, area, hero, monsters):
+        self.spawn_hero(area, hero)
+        self.spawn_monsters(area, monsters)
 
-    def start_turn(self):
-        pass
+    def spawn_hero(self, area, hero):
+        area.paste_character(hero)
 
-    def end_turn(self):
-        pass
+    def spawn_monsters(self, area, monsters):
+        for monster in monsters:
+            area.paste_character(monster)
 
-    def end_area(self):
-        pass
+    def check_next_area(self, area, characters):
+        for monster in characters[1:]:
+            if monster.__class__() == "Boss":
+                break
+        for skeleton in characters[2:]:
+            if skeleton.has_key == True:
+                break
+        else:
+            self.next_area(area, characters)
+
+    def clear_area(self, monsters):
+        for monster in monsters:
+            del monster
+
+    def next_area(self, area, characters):
+        hero = self.hero
+        monsters = characters[1:]
+        self.clear_area(monsters)
+        area.number += 1
+        self.create_characters()
+        new_monsters = characters[1:]
+        self.spawn_characters(area, hero, new_monsters)
