@@ -16,20 +16,10 @@ boss = characters[1]
 skeletons = characters[2:]
 game_manager.get_stats(characters)
 
-floor = Floor()
-wall = Wall()
-tile_size = floor.image.size[0]
-num_tiles = 10
-area = CreateArea(tile_size, (tile_size * num_tiles))
-area.get_walls()
-for i in range(num_tiles ** 2):
-    if area.tiles.get(i) == "Wall":
-        image = wall.image
-    elif area.tiles.get(i) == "Floor":
-        image = floor.image
-    area.paste_image(image)
+area = CreateArea()
+area.draw_map()
 game_manager.spawn_characters(area, hero, monsters)
-area.show()
+area.display()
 
 '''
 hero.image.show()
