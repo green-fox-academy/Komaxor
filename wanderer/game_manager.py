@@ -34,26 +34,6 @@ class Game:
         for character in characters:
             print(character.introduce())
 
-    def kill(self, character):
-        del character
-
-    def check_fight(self, attacker, defender):
-        if attacker.on_tile == defender.on_tile:
-            self.fight(attacker, defender)
-
-    def fight(self, attacker, defender):
-        while attacker.current_health > 0 and defender.current_health > 0:
-            attacker.hit(defender)
-            attacker.check_death()
-            #prevent defender to hit after it died
-            defender.hit(attacker)
-            defender.check_death()
-        if attacker.current_health <= 0:
-            self.kill(attacker)
-        else:
-            self.kill(defender)
-        #self.check_next_area(characters)
-
     def spawn_characters(self, area, hero, monsters):
         self.spawn_hero(area, hero)
         self.spawn_monsters(area, monsters)
@@ -65,6 +45,42 @@ class Game:
         for monster in monsters:
             area.paste_character(monster)
 
+    def move(self, character, direction):
+        #get character pos
+        #check for walls
+        character.turn(direction)
+        x = character.x_axis
+        y = character.y_axis
+        if direction == 'up':
+            y -= 1
+        elif direction == 'down':
+            y += 1
+        elif direction == 'right':
+            x += 1
+        elif direction == 'left':
+            x -= 1
+        #check for other characters
+        #if hero x monster -> fight
+
+    def check_fight(self, attacker, defender):
+        if attacker.on_tile == defender.on_tile:
+            self.fight(attacker, defender)
+
+    def fight(self, attacker, defender):
+        while attacker.current_health > 0 and defender.current_health > 0:
+            attacker.hit(defender)
+            defender.check_death()
+            #prevent defender to hit after it died
+            defender.hit(attacker)
+            attacker.check_death()
+        if attacker.current_health <= 0:
+            self.kill(attacker)
+        else:
+            self.kill(defender)
+
+    def kill(self, character):
+        del character
+
     def check_next_area(self, area, characters):
         for monster in characters[1:]:
             if monster.__class__() == "Boss":
@@ -75,10 +91,6 @@ class Game:
         else:
             self.next_area(area, characters)
 
-    def clear_area(self, monsters):
-        for monster in monsters:
-            del monster
-
     def next_area(self, area, characters):
         hero = self.hero
         monsters = characters[1:]
@@ -87,21 +99,46 @@ class Game:
         self.create_characters()
         new_monsters = characters[1:]
         self.spawn_characters(area, hero, new_monsters)
-'''
+
+    def clear_area(self, monsters):
+        for monster in monsters:
+            del monster
+    '''
     def move_hero(self, hero, direction):
         destination = '' #get tile
         hero.turn(direction)
         if destination.walkable == True:
             hero.x_axis = destination.x_axis
             hero.y_axis = destination.y_axis
-            '''
-
-def keypress(self, character, e):
-        if e.keycode == 87:   # W
-            character.direction = 'up'
-        elif e.keycode == 83:  # S
-            character.direction = 'down'
-        elif e.keycode == 65:  # A
-            character.direction = 'left'
-        elif e.keycode == 68:  # D
-            character.direction = 'right'
+    '''
+    '''
+    def keypress(self, character, e):
+            if e.keycode == 87:   # W
+                character.direction = 'up'
+            elif e.keycode == 83:  # S
+                character.direction = 'down'
+            elif e.keycode == 65:  # A
+                character.direction = 'left'
+            elif e.keycode == 68:  # D
+                character.direction = 'right'
+    '''
+    def player_input(self):
+        directions = ['w', 'a', 's', 'd']
+        while True:
+            try:
+                x = input("Which direction do you want to go? ")
+            except ValueError:
+                print("Use WASD for movement!")
+                continue
+            if x not in directions:
+                print("Use WASD for movement!")
+                continue
+            else:
+                if x == 'w' or x == 'W':
+                    return 'up'
+                if x == 's' or x == 'S':
+                    return 'down'
+                if x == 'a' or x == 'A':
+                    return 'left'
+                if x == 'd' or x == 'D':
+                    return 'right'

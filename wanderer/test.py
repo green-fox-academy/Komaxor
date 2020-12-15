@@ -25,3 +25,6 @@ hero.image.show()
 hero.turn('left')
 hero.image.show()
 '''
+
+game_manager.fight(hero, boss)
+print(game_manager.get_stats(characters))

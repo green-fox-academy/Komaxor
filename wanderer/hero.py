@@ -14,11 +14,14 @@ class Hero(Character):
         self.strike_point = 5 + super().rng()
         self.on_tile = 1
         self.image_down = Image.open("assets/hero-down.png")
+        self.image_down = self.image_down.convert('RGBA')
         self.image_up = Image.open("assets/hero-up.png")
+        self.image_up = self.image_up.convert('RGBA')
         self.image_left = Image.open("assets/hero-left.png")
+        self.image_left = self.image_left.convert('RGBA')
         self.image_right = Image.open("assets/hero-right.png")
+        self.image_right = self.image_right.convert('RGBA')
         self.image = self.image_down
-        self.image = self.image.convert('RGBA')
 
     def turn(self, direction):
         if direction == 'down':
@@ -31,7 +34,8 @@ class Hero(Character):
             self.image = self.image_right
 
     def level_up(self):
-        self.max_health += super().rng() #current health too?
+        self.max_health += super().rng()
+        #self.current_health += super().rng()
         self.def_point += super().rng()
         self.strike_point += super().rng()
 

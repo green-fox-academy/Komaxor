@@ -20,11 +20,6 @@ class Character:
             str(self.current_health) + "/" + str(self.max_health) +
             " | DP: " + str(self.def_point) + " | SP: " + str(self.strike_point))
 
-
-    def move(self, character, direction):
-        character.turn(direction)
-        self.on_tile = self.step(direction)
-
     def step(self, direction):
         if direction == 'down' and self.on_tile < 91:
             self.on_tile += 10
