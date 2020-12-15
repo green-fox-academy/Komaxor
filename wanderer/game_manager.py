@@ -31,10 +31,8 @@ class Game:
         return monsters
 
     def get_stats(self, characters):
-        for i in range(0, len(characters)):
-            print(characters[i].__class__.__name__ + " (Level " + str(characters[i].level) + ") HP: " +
-                str(characters[i].current_health) + "/" + str(characters[i].max_health) +
-                " | DP: " + str(characters[i].def_point) + " | SP: " + str(characters[i].strike_point))
+        for character in characters:
+            print(character.introduce())
 
     def kill(self, character):
         del character
@@ -97,3 +95,13 @@ class Game:
             hero.x_axis = destination.x_axis
             hero.y_axis = destination.y_axis
             '''
+
+def keypress(self, character, e):
+        if e.keycode == 87:   # W
+            character.direction = 'up'
+        elif e.keycode == 83:  # S
+            character.direction = 'down'
+        elif e.keycode == 65:  # A
+            character.direction = 'left'
+        elif e.keycode == 68:  # D
+            character.direction = 'right'

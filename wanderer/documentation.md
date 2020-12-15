@@ -1,0 +1,1 @@
+Documentation of Wanderer by Mark Ambrus

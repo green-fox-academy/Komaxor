@@ -10,3 +10,5 @@ class Boss(Monster):
         self.def_point = (self.level / 2 * super().rng()) + (super().rng() / 2)
         self.strike_point = (self.level * super().rng()) + self.level
         self.image = Image.open("assets/boss.png")
+        self.image = self.image.convert('RGBA')
+

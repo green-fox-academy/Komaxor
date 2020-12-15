@@ -20,7 +20,6 @@ area = CreateArea()
 area.draw_map()
 game_manager.spawn_characters(area, hero, monsters)
 area.display()
-
 '''
 hero.image.show()
 hero.turn('left')

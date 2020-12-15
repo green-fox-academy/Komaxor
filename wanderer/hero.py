@@ -6,7 +6,7 @@ class Hero(Character):
 
     def __init__(self):
         super().__init__()
-        self.direction = 'down'
+        self.direction = ''
         self.level = 1
         self.max_health = 20 + 3 * super().rng()
         self.current_health = self.max_health
@@ -18,7 +18,7 @@ class Hero(Character):
         self.image_left = Image.open("assets/hero-left.png")
         self.image_right = Image.open("assets/hero-right.png")
         self.image = self.image_down
-
+        self.image = self.image.convert('RGBA')
 
     def turn(self, direction):
         if direction == 'down':

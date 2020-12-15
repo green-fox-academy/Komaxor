@@ -11,3 +11,5 @@ class Skeleton(Monster):
         self.def_point = self.level / 2 * super().rng()
         self.strike_point = self.level * super().rng()
         self.image = Image.open("assets/skeleton.png")
+        self.image = self.image.convert('RGBA')
+

@@ -14,6 +14,7 @@ class Floor(Tile):
     def __init__(self):
         super().__init__()
         self.image = Image.open("assets/floor.png")
+        self.image = self.image.convert('RGBA')
         self.walkable = True
 
 class Wall(Tile):
@@ -21,3 +22,4 @@ class Wall(Tile):
     def __init__(self):
         super().__init__()
         self.image = Image.open("assets/wall.png")
+        self.image = self.image.convert('RGBA')

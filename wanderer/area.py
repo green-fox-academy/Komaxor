@@ -46,4 +46,5 @@ class CreateArea:
     def paste_character(self, character):
         image = character.image
         place = (character.x_axis, character.y_axis, character.x_axis + image.size[0], character.y_axis + image.size[1])
-        self.bg.paste(image, place)
+        res = Image.alpha_composite(floor.image, image)
+        self.bg.paste(res, place)

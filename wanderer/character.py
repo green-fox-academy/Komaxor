@@ -15,6 +15,12 @@ class Character:
     def rng(self):
         return randrange(1, 6)
 
+    def introduce(self):
+        return (self.__class__.__name__ + " (Level " + str(self.level) + ") HP: " +
+            str(self.current_health) + "/" + str(self.max_health) +
+            " | DP: " + str(self.def_point) + " | SP: " + str(self.strike_point))
+
+
     def move(self, character, direction):
         character.turn(direction)
         self.on_tile = self.step(direction)
