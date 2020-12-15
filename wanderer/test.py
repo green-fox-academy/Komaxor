@@ -25,5 +25,4 @@ area.display()
 hero.image.show()
 hero.turn('left')
 hero.image.show()
-
 '''
