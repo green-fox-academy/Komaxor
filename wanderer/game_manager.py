@@ -89,3 +89,11 @@ class Game:
         self.create_characters()
         new_monsters = characters[1:]
         self.spawn_characters(area, hero, new_monsters)
+'''
+    def move_hero(self, hero, direction):
+        destination = '' #get tile
+        hero.turn(direction)
+        if destination.walkable == True:
+            hero.x_axis = destination.x_axis
+            hero.y_axis = destination.y_axis
+            '''

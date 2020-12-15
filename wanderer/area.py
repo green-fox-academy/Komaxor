@@ -1,7 +1,7 @@
 from tiles import Floor, Wall
 from PIL import Image
 
-wall = Wall()
+#wall = Wall()
 floor = Floor()
 class CreateArea:
 
@@ -33,22 +33,15 @@ class CreateArea:
         self.bg.show()
 
     def draw_map(self):
-        self.get_walls()
-        for i in range(self.number_of_tiles ** 2):
-            if self.tiles.get(i) == "Wall":
-                image = wall.image
-            elif self.tiles.get(i) == "Floor":
-                image = floor.image
-            self.paste_tile(image)
-
-    def get_walls(self):
         walls = [13, 15, 17, 18, 21, 22, 23, 25, 28, 35, 41, 42, 43, 45, 47,
                  51, 61, 63, 65, 66, 68, 75, 78, 81, 82, 83, 88, 95, 96]
-        for i in range(int((self.area_size / self.tile_size) ** 2)):
+        for i in range(self.number_of_tiles ** 2):
             if i in walls:
-                self.tiles[i] = "Wall"
+                self.tiles[i] = Wall()
             else:
-                self.tiles[i] = "Floor"
+                self.tiles[i] = Floor()
+            image = self.tiles[i].image
+            self.paste_tile(image)
 
     def paste_character(self, character):
         image = character.image
