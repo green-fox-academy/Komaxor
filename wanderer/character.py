@@ -38,6 +38,6 @@ class Character:
     def check_death(self):
         if self.current_health <= 0:
             if self.__class__() == 'Monster':
-                return ("Monster successfully destroyed!")
+                return "Monster successfully destroyed!"
             if self.__class__() == 'Hero':
-                return ("You died!")
+                return "You died!"

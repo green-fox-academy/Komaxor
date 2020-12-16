@@ -48,6 +48,7 @@ class Game:
     def move(self, character, direction):
         #get character pos
         #check for walls
+        #print(direction)
         character.turn(direction)
         x = character.x_axis
         y = character.y_axis
@@ -111,17 +112,17 @@ class Game:
             hero.x_axis = destination.x_axis
             hero.y_axis = destination.y_axis
     '''
-    '''
-    def keypress(self, character, e):
-            if e.keycode == 87:   # W
-                character.direction = 'up'
-            elif e.keycode == 83:  # S
-                character.direction = 'down'
-            elif e.keycode == 65:  # A
-                character.direction = 'left'
-            elif e.keycode == 68:  # D
-                character.direction = 'right'
-    '''
+
+    def keypress(self, key):
+            if key.keycode == 87:   # W
+                return' up'
+            elif key.keycode == 83:  # S
+                return 'down'
+            elif key.keycode == 65:  # A
+                return 'left'
+            elif key.keycode == 68:  # D
+                return 'right'
+
     def player_input(self):
         directions = ['w', 'a', 's', 'd']
         while True:
