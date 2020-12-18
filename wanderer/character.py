@@ -8,12 +8,11 @@ class Character:
         self.current_health = 0
         self.def_point = 0
         self.strike_point = 0
-        self.on_tile = 0
-        self.x_axis = 0
-        self.y_axis = 0
+        self.x = 0
+        self.y = 0
 
-    def rng(self):
-        return randrange(1, 6)
+    def rng(self, min, max):
+        return randrange(min, max)
 
     def introduce(self):
         return (self.__class__.__name__ + " (Level " + str(self.level) + ") HP: " +
@@ -21,15 +20,15 @@ class Character:
             " | DP: " + str(self.def_point) + " | SP: " + str(self.strike_point))
 
     def step(self, direction):
-        if direction == 'down' and self.on_tile < 91:
-            self.on_tile += 10
-        if direction == 'up' and self.on_tile > 10:
-            self.on_tile -= 10
-        if direction == 'right' and self.on_tile - 1 == 0:
-            self.on_tile += 1
-        if direction == 'left' and self.on_tile % 10 == 0:
-            self.on_tile -= 1
-        return self.on_tile
+        if direction == 'down' and self.y < 9:
+            self.y += 1
+        if direction == 'up' and self.y > 0:
+            self.y -= 1
+        if direction == 'right' and self.x < 9:
+            self.x += 1
+        if direction == 'left' and self.x > 0:
+            self.x -= 1
+        return (self.y, self.x)
 
     def hit(self, defender):
         defender.current_health -= self.strike_point

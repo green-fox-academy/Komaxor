@@ -8,19 +8,19 @@ class Hero(Character):
         super().__init__()
         self.direction = ''
         self.level = 1
-        self.max_health = 20 + 3 * super().rng()
+        self.max_health = 20 + 3 * super().rng(1, 6)
         self.current_health = self.max_health
-        self.def_point = 2 * super().rng()
-        self.strike_point = 5 + super().rng()
+        self.def_point = 2 * super().rng(1, 6)
+        self.strike_point = 5 + super().rng(1, 6)
         self.on_tile = 1
         self.image_down = Image.open("assets/hero-down.png")
-        self.image_down = self.image_down.convert('RGBA')
+        #self.image_down = self.image_down.convert('RGBA')
         self.image_up = Image.open("assets/hero-up.png")
-        self.image_up = self.image_up.convert('RGBA')
+        #self.image_up = self.image_up.convert('RGBA')
         self.image_left = Image.open("assets/hero-left.png")
-        self.image_left = self.image_left.convert('RGBA')
+        #self.image_left = self.image_left.convert('RGBA')
         self.image_right = Image.open("assets/hero-right.png")
-        self.image_right = self.image_right.convert('RGBA')
+        #self.image_right = self.image_right.convert('RGBA')
         self.image = self.image_down
 
     def turn(self, direction):
@@ -34,10 +34,10 @@ class Hero(Character):
             self.image = self.image_right
 
     def level_up(self):
-        self.max_health += super().rng()
+        self.max_health += super().rng(1, 6)
         #self.current_health += super().rng()
-        self.def_point += super().rng()
-        self.strike_point += super().rng()
+        self.def_point += super().rng(1, 6)
+        self.strike_point += super().rng(1, 6)
 
     def restore_health(self):
         random = randrange(1, 11)

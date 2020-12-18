@@ -1,25 +1,28 @@
-from PIL import Image
+from PIL import Image, ImageTk
 
 class Tile:
 
     def __init__(self):
-        self.x_axis = 0
-        self.y_axis = 0
+        self.x = 0
+        self.y = 0
         self.has_monster = False
         self.has_hero = False
         self.walkable = False
+        self.image_path = ""
+
+    def get_image(self):
+        return ImageTk.PhotoImage(Image.open(self.image_path))
 
 class Floor(Tile):
 
     def __init__(self):
         super().__init__()
-        self.image = Image.open("assets/floor.png")
-        self.image = self.image.convert('RGBA')
         self.walkable = True
+        self.image_path = "assets/floor.gif"
+
 
 class Wall(Tile):
 
     def __init__(self):
         super().__init__()
-        self.image = Image.open("assets/wall.png")
-        self.image = self.image.convert('RGBA')
+        self.image_path = "assets/wall.gif"

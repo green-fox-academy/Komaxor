@@ -46,21 +46,33 @@ class Game:
             area.paste_character(monster)
 
     def move(self, character, direction):
-        #get character pos
+        x, y = self.get_position(character)
+        print(x, y)
+        if character.__class__.__name__ == 'Hero':
+            character.turn(direction)
+        destination_x, destination_y = self.calculate_destination(direction, x, y)
+        character.x_axis, character.y_axis = destination_x, destination_y
+
+    def get_position(self, item):
+        x = item.x_axis
+        y = item.y_axis
+        return (x, y)
+
+    def calculate_destination(self, direction, x, y):
+        if direction == 'up':
+            y -= 72
+        elif direction == 'down':
+            y += 72
+        elif direction == 'right':
+            x += 72
+        elif direction == 'left':
+            x -= 72
+        return (x, y)
+
         #check for walls
         #print(direction)
-        character.turn(direction)
-        x = character.x_axis
-        y = character.y_axis
-        if direction == 'up':
-            y -= 1
-        elif direction == 'down':
-            y += 1
-        elif direction == 'right':
-            x += 1
-        elif direction == 'left':
-            x -= 1
         #check for other characters
+        #character.step(direction)
         #if hero x monster -> fight
 
     def check_fight(self, attacker, defender):
@@ -111,17 +123,7 @@ class Game:
         if destination.walkable == True:
             hero.x_axis = destination.x_axis
             hero.y_axis = destination.y_axis
-    '''
 
-    def keypress(self, key):
-            if key.keycode == 87:   # W
-                return' up'
-            elif key.keycode == 83:  # S
-                return 'down'
-            elif key.keycode == 65:  # A
-                return 'left'
-            elif key.keycode == 68:  # D
-                return 'right'
 
     def player_input(self):
         directions = ['w', 'a', 's', 'd']
@@ -143,3 +145,4 @@ class Game:
                     return 'left'
                 if x == 'd' or x == 'D':
                     return 'right'
+    '''

@@ -20,7 +20,7 @@ def on_release(key):
 
 while True: #app
     #print('the app started')
-    print("Mark: Welcome to the Tic-Tac-Toe game! Let's play!")
+    print("Mark: Welcome to the Wanderer game! Let's play!")
     game_manager = Game()
 
     while True: #game
@@ -38,8 +38,6 @@ while True: #app
 
         while True: #area
             #print('the area started')
-            #listener = keyboard.Listener(on_press = on_press)
-            #listener.start()
             turn = 1
             game_manager.spawn_characters(area, hero, monsters)
             area.display()
@@ -54,7 +52,6 @@ while True: #app
                     game_manager.move(monsters, directions[0]) #choose randomly
             game_manager.check_next_area(area, characters)
             turn += 1
-            #listener.stop()
 
 
 '''

@@ -1,28 +1,22 @@
-from random import randrange
-from area import CreateArea
 from hero import Hero
 from skeleton import Skeleton
 from boss import Boss
 from game_manager import Game
-from PIL import Image
+from PIL import Image, ImageTk
 from tiles import Floor, Wall
 from pynput.keyboard import Key, Listener
+from area2 import Area
+from tkinter import *
 
-def on_press(key):
-    #keys = ['w', 's', 'a', 'd']
-    try:
-        #print('alphanumeric key {0} pressed'.format(key.char))
-        if key.char == 'w':
-            game_manager.move(hero, 'up')
-        if key.char == 's':
-            game_manager.move(hero, 'down')
-        if key.char == 'a':
-            game_manager.move(hero, 'left')
-        if key.char == 'd':
-            game_manager.move(hero, 'right')
-    except AttributeError:
-        #print('special key {0} pressed'.format(key))
-        pass
+def on_key_press(self, e):
+    if e.keycode == 87:   # W
+        return' up'
+    elif e.keycode == 83:  # S
+        return 'down'
+    elif e.keycode == 65:  # A
+        return 'left'
+    elif e.keycode == 68:  # D
+        return 'right'
 
 def on_release(key):
     pass
@@ -35,22 +29,39 @@ monsters = characters[1:]
 boss = characters[1]
 skeletons = characters[2:]
 
-area = CreateArea()
-area.draw_map()
-game_manager.spawn_characters(area, hero, monsters)
-#area.display()
+area = Area()
+wall = Wall()
+
+# Create the tk environment as usual
+root = Tk()
+canvas = Canvas(root, width=area.app_x, height=area.app_y)
+canvas.pack()
+area.draw(canvas)
+root.mainloop()
+
+#canvas.bind("<KeyPress>", on_key_press)
+#canvas.focus_set()
+
+# Draw the box in the initial position
+#area.draw(canvas)
 '''
+game_manager.spawn_characters(area, hero, monsters)
+
+game_manager.move(hero, 'right')
+game_manager.move(hero, 'right')
+game_manager.move(hero, 'right')
+#area.display()
+
 hero.image.show()
 hero.turn('left')
 hero.image.show()
-'''
 
 print(game_manager.get_stats(characters))
 game_manager.fight(hero, boss)
 print(game_manager.get_stats(characters))
 
-
 with Listener(
     on_press=on_press,
     on_release=on_release) as l:
     l.join()
+    '''
