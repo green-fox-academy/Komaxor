@@ -27,22 +27,21 @@ def on_release(e):
 def game_turn():
     game_manager.set_hero_position(area, canvas, hero, direction)
     #game_manager.check_next_area(area, canvas, characters)
-    #if turn_count % 2 == 0:
-        #directions = ['up', 'down', 'left', 'right']
-        #for monster in monsters:
-            #dir = 'up' #random direction, check for monsters and wall
-            #game_manager.move(area, canvas, monster, dir)
-    #turn_count += 1
-    #print(turn_count)
+    if game_manager.turn_count % 2 == 0:
+        for monster in monsters:
+            game_manager.set_monster_position(area, canvas, monster)
+    for tile in area.tiles.keys():
+        if tile not in area.free_tiles[0]:
+            print(tile)
+    print(game_manager.turn_count)
 
 game_manager = Game()
 
 characters = game_manager.create_characters()
 hero = characters[0]
 monsters = characters[1:]
-boss = characters[1]
-skeletons = characters[2:]
-turn_count = 0
+#boss = characters[1]
+#skeletons = characters[2:]
 
 area = Area()
 
@@ -51,7 +50,7 @@ root = Tk()
 canvas = Canvas(root, width=area.app_x, height=area.app_y)
 canvas.pack()
 area.draw_map(canvas)
-game_manager.spawn_characters(area, canvas, hero, monsters)
+game_manager.spawn_characters(area, canvas, characters)
 game_manager.get_stats(characters)
 
 canvas.bind("<KeyPress>", on_key_press)

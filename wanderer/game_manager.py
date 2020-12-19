@@ -8,6 +8,7 @@ class Game:
 
     def __init__(self):
         self.hero = Hero()
+        self.turn_count = 0
 
     def create_characters(self):
         characters = []
@@ -46,7 +47,9 @@ class Game:
             if tile.walkable == True and tile.has_hero == False and tile.has_monster == False:
                 area.free_tiles.append((tile, tile.x, tile.y))
 
-    def spawn_characters(self, area, canvas, hero, monsters):
+    def spawn_characters(self, area, canvas, characters):
+        hero = characters[0]
+        monsters = characters[1:]
         area.character_images = {}
         self.spawn_hero(area, canvas, hero)
         self.spawn_monsters(area, canvas, monsters)
@@ -83,16 +86,19 @@ class Game:
                     #tile.has_hero = True
             hero.x, hero.y = destination_x, destination_y
             area.draw_character(canvas, hero)
+            #set tile has_hero to true
+            self.increase_turn_count()
         else:
             print('The edge has been reached!')
             return
 
-    def set_monster_position(self, area, canvas, monster, direction):
+    def set_monster_position(self, area, canvas, monster):
+        direction = self.get_random_direction()
         destination_x, destination_y = self.calculate_destination(monster, direction)
         is_wall = self.check_walls(area, destination_x, destination_y)
         if is_wall == True:
-            dir = 'down' #change so it works
-            self.set_monster_position(area, canvas, monster, dir)
+            #direction = self.get_random_direction()
+            self.set_monster_position(area, canvas, monster)
         if (destination_x >= 0 and destination_x < area.area_size
             and destination_y >= 0 and destination_y < area.area_size):
             #for tile in area.tiles:
@@ -101,8 +107,16 @@ class Game:
                     #tile.has_monster = True
             monster.x, monster.y = destination_x, destination_y
         else:
-            dir = 'down' #change so it works
-            self.set_monster_position(area, canvas, monster, dir)
+            #direction = self.get_random_direction()
+            self.set_monster_position(area, canvas, monster)
+        print(direction)
+        area.draw_character(canvas, monster)
+        #set tile has_monster to true
+
+    def get_random_direction(self):
+            directions = ['up', 'down', 'left', 'right']
+            direction = directions[randrange(len(directions))]
+            return direction
 
     def calculate_destination(self, character, direction):
         if direction == 'up':
@@ -155,6 +169,9 @@ class Game:
     def kill(self, character):
         del character
 
+    def increase_turn_count(self):
+        self.turn_count += 1
+
     def check_next_area(self, area, canvas, characters):
         if characters[1].__class__() == "Boss":
             return
@@ -164,13 +181,11 @@ class Game:
         self.next_area(area, canvas, characters)
 
     def next_area(self, area, canvas, characters):
-        hero = self.hero
         monsters = characters[1:]
         self.clear_area(monsters)
         area.number += 1
-        self.create_characters()
-        new_monsters = characters[1:]
-        self.spawn_characters(area, canvas, hero, new_monsters)
+        characters = self.create_characters()
+        self.spawn_characters(area, canvas, characters)
 
     def clear_area(self, monsters):
         for monster in monsters:
