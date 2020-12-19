@@ -5,6 +5,7 @@ class Hero(Character):
 
     def __init__(self):
         super().__init__()
+        self.name = 'Hero'
         self.direction = ''
         self.level = 1
         self.max_health = 20 + 3 * super().rng(1, 6)

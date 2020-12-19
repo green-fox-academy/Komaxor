@@ -24,7 +24,7 @@ class Game:
         skeletons = []
         skeleton_number = randrange(2, 5)
         for i in range(skeleton_number):
-            skeletons.append(Skeleton())
+            skeletons.append(Skeleton('Skeleton ' + str(i + 1)))
         skeletons[0].has_key == True
         for i in range(0, len(skeletons)):
             monsters.append(skeletons[i])
@@ -44,17 +44,18 @@ class Game:
         for tile in area.tiles.values():
             #self.get_tile_stats(tile)
             if tile.walkable == True and tile.has_hero == False and tile.has_monster == False:
-                area.free_tiles.append((tile, tile.y, tile.x))
+                area.free_tiles.append((tile, tile.x, tile.y))
 
     def spawn_characters(self, area, canvas, hero, monsters):
-        self.set_free_tiles(area)
+        area.character_images = {}
         self.spawn_hero(area, canvas, hero)
         self.spawn_monsters(area, canvas, monsters)
 
     def spawn_hero(self, area, canvas, hero):
         self.set_free_tiles(area)
+        hero.image_path = hero.image_down
         area.draw_character(canvas, hero)
-        tile = area.free_tiles[0][0]
+        tile = area.tiles[0]
         tile.has_hero = True
 
     def spawn_monsters(self, area, canvas, monsters):
@@ -66,33 +67,44 @@ class Game:
             area.draw_character(canvas, monster)
             tile[0].has_monster = True
 
-    def set_character_position(self, area, canvas, character, direction):
-        if character.__class__.__name__ == 'Hero':
-            character.turn(direction)
-            print('the hero has been turned' + direction)
-        print(character.x, character.y)
-        destination_x, destination_y = self.calculate_destination(character, direction)
-        print('destination has been calculated')
+    def set_hero_position(self, area, canvas, hero, direction):
+        hero.turn(direction)
+        area.draw_character(canvas, hero)
+        destination_x, destination_y = self.calculate_destination(hero, direction)
         is_wall = self.check_walls(area, destination_x, destination_y)
         if is_wall == True:
-            print('Ouch! Whatch where you are going!')
+            print('Ouch! Watch where you are going!')
             return
         if (destination_x >= 0 and destination_x < area.area_size
             and destination_y >= 0 and destination_y < area.area_size):
-            character.x, character.y = destination_x, destination_y
-            print('character position has been set')
-            print(character.x, character.y)
+            #for tile in area.tiles:
+                #tile.has_hero = False
+                #if tile.x == destination_x and tile.y == destination_y:
+                    #tile.has_hero = True
+            hero.x, hero.y = destination_x, destination_y
+            area.draw_character(canvas, hero)
         else:
-            print('Out of map')
+            print('The edge has been reached!')
             return
 
-    def get_position(self, item):
-        x = item.x
-        y = item.y
-        return (x, y)
+    def set_monster_position(self, area, canvas, monster, direction):
+        destination_x, destination_y = self.calculate_destination(monster, direction)
+        is_wall = self.check_walls(area, destination_x, destination_y)
+        if is_wall == True:
+            dir = 'down' #change so it works
+            self.set_monster_position(area, canvas, monster, dir)
+        if (destination_x >= 0 and destination_x < area.area_size
+            and destination_y >= 0 and destination_y < area.area_size):
+            #for tile in area.tiles:
+                #tile.has_monster = False
+                #if tile.x == destination_x and tile.y == destination_y:
+                    #tile.has_monster = True
+            monster.x, monster.y = destination_x, destination_y
+        else:
+            dir = 'down' #change so it works
+            self.set_monster_position(area, canvas, monster, dir)
 
     def calculate_destination(self, character, direction):
-        #x, y = self.get_position(character)
         if direction == 'up':
             x = character.x
             y = character.y - 72
@@ -144,9 +156,8 @@ class Game:
         del character
 
     def check_next_area(self, area, canvas, characters):
-        for monster in characters[1:]:
-            if monster.__class__() == "Boss":
-                return
+        if characters[1].__class__() == "Boss":
+            return
         for skeleton in characters[2:]:
             if skeleton.has_key == True:
                 return

@@ -10,13 +10,13 @@ from tkinter import *
 
 def on_key_press(e):
     global direction
-    if e.keycode == 87 or e.keycode == 119 or e.keycode == 8320768:   # W and w and up arrow
+    if e.keycode == 87 or e.keycode == 119 or e.keycode == 8320768: # W and w and up arrow
         direction = 'up'
-    elif e.keycode == 83 or e.keycode == 115 or e.keycode == 8255233:  # S and s and down arrow
+    elif e.keycode == 83 or e.keycode == 115 or e.keycode == 8255233: # S and s and down arrow
         direction = 'down'
-    elif e.keycode == 65 or e.keycode == 97 or e.keycode == 8124162:  # A and a and left arrow
+    elif e.keycode == 65 or e.keycode == 97 or e.keycode == 8124162: # A and a and left arrow
         direction = 'left'
-    elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699:  # D and d and right arrow
+    elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699: # D and d and right arrow
         direction = 'right'
     #elif e.keycode == 3473435: exit game
     game_turn()
@@ -25,15 +25,15 @@ def on_release(e):
     pass
 
 def game_turn():
-    turn_count = 0
-    game_manager.set_character_position(area, canvas, hero, direction)
+    game_manager.set_hero_position(area, canvas, hero, direction)
     #game_manager.check_next_area(area, canvas, characters)
-    if turn_count % 2 == 0:
-        directions = ['up', 'down', 'left', 'right']
-        for monster in monsters:
-            dir = 'up' #random direction, check for monsters and wall
+    #if turn_count % 2 == 0:
+        #directions = ['up', 'down', 'left', 'right']
+        #for monster in monsters:
+            #dir = 'up' #random direction, check for monsters and wall
             #game_manager.move(area, canvas, monster, dir)
-    turn_count += 1
+    #turn_count += 1
+    #print(turn_count)
 
 game_manager = Game()
 

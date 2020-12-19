@@ -14,7 +14,7 @@ class Area:
         self.floors = []
         self.free_tiles = []
         self.map_images = []
-        self.character_images = []
+        self.character_images = {}
         self.area_size = self.tile_size * self.number_of_tiles
         self.info_size = 200
         self.app_x = self.area_size + self.info_size
@@ -49,7 +49,7 @@ class Area:
 
     def draw_character(self, canvas, character):
         img = character.get_image()
-        self.character_images.append(img)
+        self.character_images[character.name] = img
         y = character.y
         x = character.x
-        canvas.create_image(y, x, anchor=NW, image=img)
+        canvas.create_image(x, y, anchor=NW, image=img)

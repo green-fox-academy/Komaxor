@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 class Character:
 
     def __init__(self):
+        self.name = ''
         self.level = 0
         self.max_health = 0
         self.current_health = 0
