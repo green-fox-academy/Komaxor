@@ -5,13 +5,13 @@ from pynput import keyboard
 def on_press(key):
     try:
         if key.char == 'w':
-            game_manager.move(hero, 'up')
+            game_manager.set_character_position(hero, 'up')
         if key.char == 's':
-            game_manager.move(hero, 'down')
+            game_manager.set_character_position(hero, 'down')
         if key.char == 'a':
-            game_manager.move(hero, 'left')
+            game_manager.set_character_position(hero, 'left')
         if key.char == 'd':
-            game_manager.move(hero, 'right')
+            game_manager.set_character_position(hero, 'right')
     except AttributeError:
         pass
 
@@ -49,7 +49,7 @@ while True: #app
             game_manager.check_next_area(area, characters)
             if turn % 2 == 0:
                 for monster in monsters:
-                    game_manager.move(monsters, directions[0]) #choose randomly
+                    game_manager.set_character_position(monsters, directions[0]) #choose randomly
             game_manager.check_next_area(area, characters)
             turn += 1
 

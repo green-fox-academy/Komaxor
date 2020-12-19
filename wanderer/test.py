@@ -8,18 +8,32 @@ from pynput.keyboard import Key, Listener
 from area2 import Area
 from tkinter import *
 
-def on_key_press(self, e):
-    if e.keycode == 87:   # W
-        return' up'
-    elif e.keycode == 83:  # S
-        return 'down'
-    elif e.keycode == 65:  # A
-        return 'left'
-    elif e.keycode == 68:  # D
-        return 'right'
+def on_key_press(e):
+    global direction
+    if e.keycode == 87 or e.keycode == 119 or e.keycode == 8320768:   # W and w and up arrow
+        direction = 'up'
+    elif e.keycode == 83 or e.keycode == 115 or e.keycode == 8255233:  # S and s and down arrow
+        direction = 'down'
+    elif e.keycode == 65 or e.keycode == 97 or e.keycode == 8124162:  # A and a and left arrow
+        direction = 'left'
+    elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699:  # D and d and right arrow
+        direction = 'right'
+    #elif e.keycode == 3473435: exit game
+    game_turn()
 
-def on_release(key):
+def on_release(e):
     pass
+
+def game_turn():
+    turn_count = 0
+    game_manager.set_character_position(area, canvas, hero, direction)
+    #game_manager.check_next_area(area, canvas, characters)
+    if turn_count % 2 == 0:
+        directions = ['up', 'down', 'left', 'right']
+        for monster in monsters:
+            dir = 'up' #random direction, check for monsters and wall
+            #game_manager.move(area, canvas, monster, dir)
+    turn_count += 1
 
 game_manager = Game()
 
@@ -28,9 +42,9 @@ hero = characters[0]
 monsters = characters[1:]
 boss = characters[1]
 skeletons = characters[2:]
+turn_count = 0
 
 area = Area()
-wall = Wall()
 
 # Create the tk environment as usual
 root = Tk()
@@ -39,30 +53,14 @@ canvas.pack()
 area.draw_map(canvas)
 game_manager.spawn_characters(area, canvas, hero, monsters)
 game_manager.get_stats(characters)
+
+canvas.bind("<KeyPress>", on_key_press)
+canvas.focus_set()
+
 root.mainloop()
-
-#canvas.bind("<KeyPress>", on_key_press)
-#canvas.focus_set()
-
-# Draw the box in the initial position
-#area.draw(canvas)
 '''
-
-game_manager.move(hero, 'right')
-game_manager.move(hero, 'right')
-game_manager.move(hero, 'right')
-#area.display()
-
-hero.image.show()
-hero.turn('left')
-hero.image.show()
 
 print(game_manager.get_stats(characters))
 game_manager.fight(hero, boss)
 print(game_manager.get_stats(characters))
-
-with Listener(
-    on_press=on_press,
-    on_release=on_release) as l:
-    l.join()
     '''

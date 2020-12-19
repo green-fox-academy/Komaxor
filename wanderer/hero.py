@@ -19,13 +19,13 @@ class Hero(Character):
 
     def turn(self, direction):
         if direction == 'down':
-            self.image = self.image_down
+            self.image_path = self.image_down
         if direction == 'up':
-            self.image = self.image_up
+            self.image_path = self.image_up
         if direction == 'left':
-            self.image = self.image_left
+            self.image_path = self.image_left
         if direction == 'right':
-            self.image = self.image_right
+            self.image_path = self.image_right
 
     def level_up(self):
         self.max_health += super().rng(1, 6)

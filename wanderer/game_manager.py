@@ -66,33 +66,55 @@ class Game:
             area.draw_character(canvas, monster)
             tile[0].has_monster = True
 
-    def move(self, area, canvas, character, direction):
+    def set_character_position(self, area, canvas, character, direction):
         if character.__class__.__name__ == 'Hero':
             character.turn(direction)
+            print('the hero has been turned' + direction)
+        print(character.x, character.y)
         destination_x, destination_y = self.calculate_destination(character, direction)
-        if not self.check_walls (area, destination_x, destination_y):
-            return 'Ouch! Whatch where you are going!'
-        character.x_axis, character.y_axis = destination_x, destination_y
+        print('destination has been calculated')
+        is_wall = self.check_walls(area, destination_x, destination_y)
+        if is_wall == True:
+            print('Ouch! Whatch where you are going!')
+            return
+        if (destination_x >= 0 and destination_x < area.area_size
+            and destination_y >= 0 and destination_y < area.area_size):
+            character.x, character.y = destination_x, destination_y
+            print('character position has been set')
+            print(character.x, character.y)
+        else:
+            print('Out of map')
+            return
 
     def get_position(self, item):
-        x = item.x_axis
-        y = item.y_axis
+        x = item.x
+        y = item.y
         return (x, y)
 
     def calculate_destination(self, character, direction):
-        x, y = self.get_position(character)
+        #x, y = self.get_position(character)
         if direction == 'up':
-            y -= 72
+            x = character.x
+            y = character.y - 72
         elif direction == 'down':
-            y += 72
+            x = character.x
+            y = character.y + 72
         elif direction == 'right':
-            x += 72
+            y = character.y
+            x = character.x + 72
         elif direction == 'left':
-            x -= 72
+            y = character.y
+            x = character.x -72
+        else:
+            y = character.y
+            x = character.x
         return (x, y)
 
-    def check_walls(self, area, x, y):
-        if y * 10 + x in area.walls:
+    def check_walls(self, area, destination_x, destination_y):
+        if (((destination_y * area.number_of_tiles) / area.tile_size) +
+            (destination_x / area.tile_size) in area.walls):
+            return True
+        else:
             return False
 
     def check_other_characters(self, character, characters):
@@ -124,12 +146,11 @@ class Game:
     def check_next_area(self, area, canvas, characters):
         for monster in characters[1:]:
             if monster.__class__() == "Boss":
-                break
+                return
         for skeleton in characters[2:]:
             if skeleton.has_key == True:
-                break
-        else:
-            self.next_area(area, canvas, characters)
+                return
+        self.next_area(area, canvas, characters)
 
     def next_area(self, area, canvas, characters):
         hero = self.hero
@@ -143,33 +164,3 @@ class Game:
     def clear_area(self, monsters):
         for monster in monsters:
             del monster
-    '''
-    def move_hero(self, hero, direction):
-        destination = '' #get tile
-        hero.turn(direction)
-        if destination.walkable == True:
-            hero.x_axis = destination.x_axis
-            hero.y_axis = destination.y_axis
-
-
-    def player_input(self):
-        directions = ['w', 'a', 's', 'd']
-        while True:
-            try:
-                x = input("Which direction do you want to go? ")
-            except ValueError:
-                print("Use WASD for movement!")
-                continue
-            if x not in directions:
-                print("Use WASD for movement!")
-                continue
-            else:
-                if x == 'w' or x == 'W':
-                    return 'up'
-                if x == 's' or x == 'S':
-                    return 'down'
-                if x == 'a' or x == 'A':
-                    return 'left'
-                if x == 'd' or x == 'D':
-                    return 'right'
-    '''
