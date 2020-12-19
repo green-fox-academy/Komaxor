@@ -1,6 +1,5 @@
 from random import randrange
 from character import Character
-from PIL import Image
 
 class Hero(Character):
 
@@ -12,16 +11,11 @@ class Hero(Character):
         self.current_health = self.max_health
         self.def_point = 2 * super().rng(1, 6)
         self.strike_point = 5 + super().rng(1, 6)
-        self.on_tile = 1
-        self.image_down = Image.open("assets/hero-down.png")
-        #self.image_down = self.image_down.convert('RGBA')
-        self.image_up = Image.open("assets/hero-up.png")
-        #self.image_up = self.image_up.convert('RGBA')
-        self.image_left = Image.open("assets/hero-left.png")
-        #self.image_left = self.image_left.convert('RGBA')
-        self.image_right = Image.open("assets/hero-right.png")
-        #self.image_right = self.image_right.convert('RGBA')
-        self.image = self.image_down
+        self.image_down = "assets/hero-down.png"
+        self.image_up = "assets/hero-up.png"
+        self.image_left = "assets/hero-left.png"
+        self.image_right = "assets/hero-right.png"
+        self.image_path = self.image_down
 
     def turn(self, direction):
         if direction == 'down':

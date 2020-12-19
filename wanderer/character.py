@@ -1,4 +1,5 @@
 from random import randrange
+from PIL import Image, ImageTk
 
 class Character:
 
@@ -10,6 +11,7 @@ class Character:
         self.strike_point = 0
         self.x = 0
         self.y = 0
+        self.image_path = ''
 
     def rng(self, min, max):
         return randrange(min, max)
@@ -18,6 +20,9 @@ class Character:
         return (self.__class__.__name__ + " (Level " + str(self.level) + ") HP: " +
             str(self.current_health) + "/" + str(self.max_health) +
             " | DP: " + str(self.def_point) + " | SP: " + str(self.strike_point))
+
+    def get_image(self):
+        return ImageTk.PhotoImage(Image.open(self.image_path))
 
     def step(self, direction):
         if direction == 'down' and self.y < 9:

@@ -1,5 +1,5 @@
 from random import randrange
-from area import CreateArea
+from area2 import Area
 from hero import Hero
 from skeleton import Skeleton
 from boss import Boss
@@ -34,16 +34,16 @@ class Game:
         for character in characters:
             print(character.introduce())
 
-    def spawn_characters(self, area, hero, monsters):
-        self.spawn_hero(area, hero)
-        self.spawn_monsters(area, monsters)
+    def spawn_characters(self, area, canvas, hero, monsters):
+        self.spawn_hero(area, canvas, hero)
+        self.spawn_monsters(area, canvas, monsters)
 
-    def spawn_hero(self, area, hero):
-        area.paste_character(hero)
+    def spawn_hero(self, area, canvas, hero):
+        area.draw_character(canvas, hero)
 
-    def spawn_monsters(self, area, monsters):
+    def spawn_monsters(self, area, canvas, monsters):
         for monster in monsters:
-            area.paste_character(monster)
+            area.draw_character(canvas, monster)
 
     def move(self, character, direction):
         x, y = self.get_position(character)

@@ -36,7 +36,8 @@ wall = Wall()
 root = Tk()
 canvas = Canvas(root, width=area.app_x, height=area.app_y)
 canvas.pack()
-area.draw(canvas)
+area.draw_map(canvas)
+game_manager.spawn_characters(area, canvas, hero, monsters)
 root.mainloop()
 
 #canvas.bind("<KeyPress>", on_key_press)
@@ -45,7 +46,6 @@ root.mainloop()
 # Draw the box in the initial position
 #area.draw(canvas)
 '''
-game_manager.spawn_characters(area, hero, monsters)
 
 game_manager.move(hero, 'right')
 game_manager.move(hero, 'right')

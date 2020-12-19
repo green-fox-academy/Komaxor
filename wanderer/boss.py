@@ -1,5 +1,4 @@
 from monster import Monster
-from PIL import Image
 
 class Boss(Monster):
 
@@ -9,6 +8,4 @@ class Boss(Monster):
         self.current_health = self.max_health
         self.def_point = (self.level / 2 * super().rng(1, 6)) + (super().rng(1, 6) / 2)
         self.strike_point = (self.level * super().rng(1, 6)) + self.level
-        self.image = Image.open("assets/boss.png")
-        #self.image = self.image.convert('RGBA')
-
+        self.image_path = "assets/boss.gif"
