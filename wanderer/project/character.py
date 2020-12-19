@@ -5,7 +5,7 @@ class Character:
 
     def __init__(self):
         self.name = ''
-        self.level = 0
+        self.level = 1
         self.max_health = 0
         self.current_health = 0
         self.def_point = 0
@@ -25,18 +25,7 @@ class Character:
     def get_image(self):
         return ImageTk.PhotoImage(Image.open(self.image_path))
 
-    def step(self, direction):
-        if direction == 'down' and self.y < 9:
-            self.y += 1
-        if direction == 'up' and self.y > 0:
-            self.y -= 1
-        if direction == 'right' and self.x < 9:
-            self.x += 1
-        if direction == 'left' and self.x > 0:
-            self.x -= 1
-        return (self.y, self.x)
-
-    def hit(self, defender):
+    def strike(self, defender):
         defender.current_health -= self.strike_point
         defender.check_death()
 

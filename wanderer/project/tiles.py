@@ -18,11 +18,11 @@ class Floor(Tile):
     def __init__(self):
         super().__init__()
         self.walkable = True
-        self.image_path = "assets/floor.gif"
+        self.image_path = "project/assets/floor.gif"
 
 
 class Wall(Tile):
 
     def __init__(self):
         super().__init__()
-        self.image_path = "assets/wall.gif"
+        self.image_path = "project/assets/wall.gif"

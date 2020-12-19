@@ -6,15 +6,14 @@ class Hero(Character):
     def __init__(self):
         super().__init__()
         self.name = 'Hero'
-        self.level = 1
         self.max_health = 20 + 3 * super().rng(1, 6)
         self.current_health = self.max_health
         self.def_point = 2 * super().rng(1, 6)
         self.strike_point = 5 + super().rng(1, 6)
-        self.image_down = "assets/hero-down.png"
-        self.image_up = "assets/hero-up.png"
-        self.image_left = "assets/hero-left.png"
-        self.image_right = "assets/hero-right.png"
+        self.image_down = "project/assets/hero-down.gif"
+        self.image_up = "project/assets/hero-up.gif"
+        self.image_left = "project/assets/hero-left.gif"
+        self.image_right = "project/assets/hero-right.gif"
         self.image_path = self.image_down
 
     def turn(self, direction):

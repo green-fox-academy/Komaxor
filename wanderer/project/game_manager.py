@@ -1,18 +1,14 @@
 from random import randrange
-from area2 import Area
+from area import Area
 from hero import Hero
 from skeleton import Skeleton
 from boss import Boss
 
-class Game:
+class GameManager:
 
-    def __init__(self):
-        self.hero = Hero()
-        self.turn_count = 0
-
-    def create_characters(self):
+    def create_characters(self, hero):
         characters = []
-        characters.append(self.hero)
+        characters.append(hero)
         monsters = self.create_monsters()
         for i in range(0, len(monsters)):
             characters.append(monsters[i])
@@ -78,8 +74,8 @@ class Game:
         if is_wall == True:
             print('Ouch! Watch where you are going!')
             return
-        if (destination_x >= 0 and destination_x < area.area_size
-            and destination_y >= 0 and destination_y < area.area_size):
+        if (destination_x >= 0 and destination_x < area.size
+            and destination_y >= 0 and destination_y < area.size):
             #for tile in area.tiles:
                 #tile.has_hero = False
                 #if tile.x == destination_x and tile.y == destination_y:
@@ -87,10 +83,10 @@ class Game:
             hero.x, hero.y = destination_x, destination_y
             area.draw_character(canvas, hero)
             #set tile has_hero to true
-            self.increase_turn_count()
         else:
             print('The edge has been reached!')
             return
+        area.increase_turn_count()
 
     def set_monster_position(self, area, canvas, monster):
         direction = self.get_random_direction()
@@ -99,8 +95,8 @@ class Game:
         if is_wall == True:
             #direction = self.get_random_direction()
             self.set_monster_position(area, canvas, monster)
-        if (destination_x >= 0 and destination_x < area.area_size
-            and destination_y >= 0 and destination_y < area.area_size):
+        if (destination_x >= 0 and destination_x < area.size
+            and destination_y >= 0 and destination_y < area.size):
             #for tile in area.tiles:
                 #tile.has_monster = False
                 #if tile.x == destination_x and tile.y == destination_y:
@@ -109,7 +105,7 @@ class Game:
         else:
             #direction = self.get_random_direction()
             self.set_monster_position(area, canvas, monster)
-        print(direction)
+        #print(direction)
         area.draw_character(canvas, monster)
         #set tile has_monster to true
 
@@ -156,21 +152,17 @@ class Game:
 
     def fight(self, attacker, defender):
         while attacker.current_health > 0 and defender.current_health > 0:
-            attacker.hit(defender)
-            defender.check_death()
-            #prevent defender to hit after it died
-            defender.hit(attacker)
-            attacker.check_death()
-        if attacker.current_health <= 0:
-            self.kill(attacker)
-        else:
-            self.kill(defender)
+            attacker.strike(defender)
+            if defender.current_health <= 0:
+                print('defender died')
+                #self.kill(defender)
+            defender.strike(attacker)
+            if attacker.current_health <= 0:
+                print('attacker died')
+                #self.kill(attacker)
 
     def kill(self, character):
         del character
-
-    def increase_turn_count(self):
-        self.turn_count += 1
 
     def check_next_area(self, area, canvas, characters):
         if characters[1].__class__() == "Boss":
@@ -184,7 +176,7 @@ class Game:
         monsters = characters[1:]
         self.clear_area(monsters)
         area.number += 1
-        characters = self.create_characters()
+        characters = self.create_characters(characters[0])
         self.spawn_characters(area, canvas, characters)
 
     def clear_area(self, monsters):

@@ -6,6 +6,7 @@ class Area:
 
     def __init__(self):
         self.number = 0
+        self.turn_count = 0
         self.number_of_tiles = 10
         self.tile_size = 72
         self.tiles = {}
@@ -15,10 +16,7 @@ class Area:
         self.free_tiles = []
         self.map_images = []
         self.character_images = {}
-        self.area_size = self.tile_size * self.number_of_tiles
-        self.info_size = 200
-        self.app_x = self.area_size# + self.info_size
-        self.app_y = self.area_size
+        self.size = self.tile_size * self.number_of_tiles
         self.tile_x = 0
         self.tile_y = 0
 
@@ -53,3 +51,6 @@ class Area:
         y = character.y
         x = character.x
         canvas.create_image(x, y, anchor=NW, image=img)
+
+    def increase_turn_count(self):
+        self.turn_count += 1
