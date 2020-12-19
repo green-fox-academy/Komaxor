@@ -38,6 +38,7 @@ canvas = Canvas(root, width=area.app_x, height=area.app_y)
 canvas.pack()
 area.draw_map(canvas)
 game_manager.spawn_characters(area, canvas, hero, monsters)
+game_manager.get_stats(characters)
 root.mainloop()
 
 #canvas.bind("<KeyPress>", on_key_press)

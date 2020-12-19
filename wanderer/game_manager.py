@@ -34,27 +34,37 @@ class Game:
         for character in characters:
             print(character.introduce())
 
-    def get_free_tiles(self, area):
-        free_tiles = []
+    def get_tile_stats(self, tile):
+        print(tile.walkable)
+        print(tile.has_hero)
+        print(tile.has_monster)
+
+    def set_free_tiles(self, area):
+        area.free_tiles = []
         for tile in area.tiles.values():
+            #self.get_tile_stats(tile)
             if tile.walkable == True and tile.has_hero == False and tile.has_monster == False:
-                free_tiles.append((tile.y, tile.x))
-        return free_tiles
+                area.free_tiles.append((tile, tile.y, tile.x))
 
     def spawn_characters(self, area, canvas, hero, monsters):
+        self.set_free_tiles(area)
         self.spawn_hero(area, canvas, hero)
         self.spawn_monsters(area, canvas, monsters)
 
     def spawn_hero(self, area, canvas, hero):
+        self.set_free_tiles(area)
         area.draw_character(canvas, hero)
+        tile = area.free_tiles[0][0]
+        tile.has_hero = True
 
     def spawn_monsters(self, area, canvas, monsters):
-        free_tiles = self.get_free_tiles(area)
         for monster in monsters:
-            tile = free_tiles[randrange(len(free_tiles))]
-            monster.y = tile[0]
-            monster.x = tile[1]
+            self.set_free_tiles(area)
+            tile = area.free_tiles[randrange(len(area.free_tiles))]
+            monster.y = tile[1]
+            monster.x = tile[2]
             area.draw_character(canvas, monster)
+            tile[0].has_monster = True
 
     def move(self, area, canvas, character, direction):
         if character.__class__.__name__ == 'Hero':
