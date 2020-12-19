@@ -17,7 +17,7 @@ class Area:
         self.character_images = {}
         self.area_size = self.tile_size * self.number_of_tiles
         self.info_size = 200
-        self.app_x = self.area_size + self.info_size
+        self.app_x = self.area_size# + self.info_size
         self.app_y = self.area_size
         self.tile_x = 0
         self.tile_y = 0

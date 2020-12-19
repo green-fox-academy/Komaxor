@@ -21,34 +21,30 @@ def on_key_press(e):
     #elif e.keycode == 3473435: exit game
     game_turn()
 
-def on_release(e):
-    pass
-
 def game_turn():
     game_manager.set_hero_position(area, canvas, hero, direction)
     #game_manager.check_next_area(area, canvas, characters)
-    if game_manager.turn_count % 2 == 0:
+    if game_manager.turn_count % 2 == 0: #NOTE if even turn and player does not move monsters still move
         for monster in monsters:
             game_manager.set_monster_position(area, canvas, monster)
     for tile in area.tiles.keys():
         if tile not in area.free_tiles[0]:
             print(tile)
-    print(game_manager.turn_count)
+    #print(game_manager.turn_count)
 
 game_manager = Game()
 
 characters = game_manager.create_characters()
 hero = characters[0]
 monsters = characters[1:]
-#boss = characters[1]
-#skeletons = characters[2:]
 
 area = Area()
 
-# Create the tk environment as usual
 root = Tk()
 canvas = Canvas(root, width=area.app_x, height=area.app_y)
 canvas.pack()
+label = Label(text=hero.introduce())
+label.pack()
 area.draw_map(canvas)
 game_manager.spawn_characters(area, canvas, characters)
 game_manager.get_stats(characters)
@@ -57,9 +53,9 @@ canvas.bind("<KeyPress>", on_key_press)
 canvas.focus_set()
 
 root.mainloop()
-'''
 
+'''
 print(game_manager.get_stats(characters))
 game_manager.fight(hero, boss)
 print(game_manager.get_stats(characters))
-    '''
+'''
