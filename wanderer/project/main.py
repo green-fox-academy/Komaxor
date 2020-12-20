@@ -12,6 +12,7 @@ class App:
 
     def __init__(self):
         self.root = Tk()
+        self.root.title("Wanderer by Mark Ambrus")
         self.area = Area()
         self.game_manager = GameManager()
         self.hero = Hero()
@@ -37,28 +38,25 @@ class App:
         self.root.mainloop()
 
     def on_key_press(self, e):
-        global direction
-        if e.keycode == 87 or e.keycode == 119 or e.keycode == 8320768: # W and w and up arrow
+        #global direction
+        #NOTE use dictionary as switch?
+        if e.keycode == 87 or e.keycode == 119 or e.keycode == 8320768: #W w up
             direction = 'up'
-        elif e.keycode == 83 or e.keycode == 115 or e.keycode == 8255233: # S and s and down arrow
+        elif e.keycode == 83 or e.keycode == 115 or e.keycode == 8255233: #S s down
             direction = 'down'
-        elif e.keycode == 65 or e.keycode == 97 or e.keycode == 8124162: # A and a and left arrow
+        elif e.keycode == 65 or e.keycode == 97 or e.keycode == 8124162: #A a left
             direction = 'left'
-        elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699: # D and d and right arrow
+        elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699: #D d right
             direction = 'right'
         #elif e.keycode == 3473435: exit game
-        self.game_turn()
+        else:
+            print('Use the arrow keys or WASD to move')
+            return
+        self.game_turn(direction)
 
-    def game_turn(self):
-        self.game_manager.set_hero_position(self.area, self.canvas, self.hero, direction)
+    def game_turn(self, direction):
+        self.game_manager.set_hero_position(self.area, self.canvas, self.hero, direction, self.monsters)
         #game_manager.check_next_area(area, canvas, characters)
-        if self.area.turn_count % 2 == 0:
-            for monster in self.monsters:
-                self.game_manager.set_monster_position(self.area, self.canvas, monster)
-        #for tile in self.area.tiles.keys():
-            #if tile not in self.area.free_tiles[0]:
-                #print(tile)
-        #print(game_manager.turn_count)
 
 print("Welcome to the Wanderer game! Let's play!")
 print("Use the arrow keys or WASD to move the hero.")

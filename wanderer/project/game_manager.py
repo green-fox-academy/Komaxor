@@ -38,10 +38,10 @@ class GameManager:
 
     def set_free_tiles(self, area):
         area.free_tiles = []
-        for tile in area.tiles.values():
+        for tile in area.tiles:
             #self.get_tile_stats(tile)
-            if tile.walkable == True and tile.has_hero == False and tile.has_monster == False:
-                area.free_tiles.append((tile, tile.x, tile.y))
+            if tile[0].walkable == True and tile[0].has_hero == False and tile[0].has_monster == False:
+                area.free_tiles.append((tile[0], (tile[0].x, tile[0].y)))
 
     def spawn_characters(self, area, canvas, characters):
         hero = characters[0]
@@ -54,19 +54,19 @@ class GameManager:
         self.set_free_tiles(area)
         hero.image_path = hero.image_down
         area.draw_character(canvas, hero)
-        tile = area.tiles[0]
+        tile = area.tiles[0][0]
         tile.has_hero = True
 
     def spawn_monsters(self, area, canvas, monsters):
         for monster in monsters:
             self.set_free_tiles(area)
             tile = area.free_tiles[randrange(len(area.free_tiles))]
-            monster.y = tile[1]
-            monster.x = tile[2]
+            monster.y = tile[1][0]
+            monster.x = tile[1][1]
             area.draw_character(canvas, monster)
             tile[0].has_monster = True
 
-    def set_hero_position(self, area, canvas, hero, direction):
+    def set_hero_position(self, area, canvas, hero, direction, monsters):
         hero.turn(direction)
         area.draw_character(canvas, hero)
         destination_x, destination_y = self.calculate_destination(hero, direction)
@@ -86,27 +86,34 @@ class GameManager:
         else:
             print('The edge has been reached!')
             return
+        self.check_monster_move(area, canvas, monsters)
+
+    def check_monster_move(self, area, canvas, monsters):
+        if area.turn_count % 2 != 0:
+            for monster in monsters:
+                self.set_monster_position(area, canvas, monster)
         area.increase_turn_count()
 
     def set_monster_position(self, area, canvas, monster):
         direction = self.get_random_direction()
         destination_x, destination_y = self.calculate_destination(monster, direction)
+        print(monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
         is_wall = self.check_walls(area, destination_x, destination_y)
         if is_wall == True:
-            #direction = self.get_random_direction()
+            print('nope wall ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
             self.set_monster_position(area, canvas, monster)
-        if (destination_x >= 0 and destination_x < area.size
+        #has_monster = False
+        #if has_monster == True:
+            #print('nope another monster ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
+            #self.set_monster_position(area, canvas, monster)
+        elif (destination_x >= 0 and destination_x < area.size
             and destination_y >= 0 and destination_y < area.size):
-            #for tile in area.tiles:
-                #tile.has_monster = False
-                #if tile.x == destination_x and tile.y == destination_y:
-                    #tile.has_monster = True
             monster.x, monster.y = destination_x, destination_y
         else:
-            #direction = self.get_random_direction()
+            print('nope edge ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
             self.set_monster_position(area, canvas, monster)
-        #print(direction)
         area.draw_character(canvas, monster)
+        print('turn done')
         #set tile has_monster to true
 
     def get_random_direction(self):
@@ -163,6 +170,7 @@ class GameManager:
 
     def kill(self, character):
         del character
+        #area.character_images remove imgae of killed character
 
     def check_next_area(self, area, canvas, characters):
         if characters[1].__class__() == "Boss":
@@ -174,11 +182,12 @@ class GameManager:
 
     def next_area(self, area, canvas, characters):
         monsters = characters[1:]
-        self.clear_area(monsters)
+        self.clear_area(area, monsters)
         area.number += 1
         characters = self.create_characters(characters[0])
         self.spawn_characters(area, canvas, characters)
 
-    def clear_area(self, monsters):
+    def clear_area(self, area, monsters):
         for monster in monsters:
             del monster
+            area.character_images = {}

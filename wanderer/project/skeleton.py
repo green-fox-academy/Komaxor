@@ -2,7 +2,7 @@ from monster import Monster
 
 class Skeleton(Monster):
 
-    def __init__(self, name='Skeleton'):
+    def __init__(self, name='Skeleton #'):
         super().__init__()
         self.name = name
         self.has_key = False
