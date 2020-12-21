@@ -5,7 +5,7 @@ from tkinter import *
 class Area:
 
     def __init__(self):
-        self.number = 0
+        self.number = 0 #put in GM
         self.turn_count = 0
         self.number_of_tiles = 10
         self.tile_size = 72

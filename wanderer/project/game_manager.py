@@ -74,6 +74,9 @@ class GameManager:
         if is_wall == True:
             print('Ouch! Watch where you are going!')
             return
+        #elif has_monster == True:
+            #pass
+            #fight
         if (destination_x >= 0 and destination_x < area.size
             and destination_y >= 0 and destination_y < area.size):
             #for tile in area.tiles:
@@ -91,35 +94,52 @@ class GameManager:
     def check_monster_move(self, area, canvas, monsters):
         if area.turn_count % 2 != 0:
             for monster in monsters:
-                self.set_monster_position(area, canvas, monster)
+                self.set_monster_position(area, canvas, monster, monsters)
         area.increase_turn_count()
 
-    def set_monster_position(self, area, canvas, monster):
-        direction = self.get_random_direction()
+    def set_monster_position(self, area, canvas, monster, monsters):
+        directions = self.get_possible_moves(area, monster, monsters)
+        #print(monster.name, directions)
+        direction = directions[randrange(len(directions))]
         destination_x, destination_y = self.calculate_destination(monster, direction)
-        print(monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
-        is_wall = self.check_walls(area, destination_x, destination_y)
-        if is_wall == True:
-            print('nope wall ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
-            self.set_monster_position(area, canvas, monster)
-        #has_monster = False
-        #if has_monster == True:
-            #print('nope another monster ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
-            #self.set_monster_position(area, canvas, monster)
-        elif (destination_x >= 0 and destination_x < area.size
-            and destination_y >= 0 and destination_y < area.size):
-            monster.x, monster.y = destination_x, destination_y
-        else:
-            print('nope edge ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
-            self.set_monster_position(area, canvas, monster)
+        monster.x, monster.y = destination_x, destination_y
         area.draw_character(canvas, monster)
-        print('turn done')
+        #check hero
+        #print('turn done ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
         #set tile has_monster to true
 
-    def get_random_direction(self):
-            directions = ['up', 'down', 'left', 'right']
-            direction = directions[randrange(len(directions))]
-            return direction
+    def get_possible_moves(self, area, monster, monsters):
+        directions = ['up', 'down', 'left', 'right']
+        bad_directions = []
+        for direction in directions:
+            #print(direction)
+            destination_x, destination_y = self.calculate_destination(monster, direction)
+            is_wall = self.check_walls(area, destination_x, destination_y)
+            if is_wall == True:
+                #print('nope wall ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
+                bad_directions.append(direction)
+                continue
+            has_monster = self.check_monsters(monsters, destination_x, destination_y)
+            if has_monster == True:
+                #print('nope another monster ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
+                bad_directions.append(direction)
+                continue
+            if (destination_x < 0 or destination_x > area.size - area.tile_size
+                or destination_y < 0 or destination_y > area.size - area.tile_size):
+                #print('nope edge ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
+                bad_directions.append(direction)
+                continue
+            if len(directions) == 0:
+                monster.x, monster.y = area.free_tiles[0][0].x, area.free_tiles[0][0].y
+                print('monster is trapped')
+                break
+                #self.kill(monster)
+        if len(bad_directions) != 0:
+            for item in bad_directions:
+                directions.remove(item)
+                #print(item)
+                #print(directions)
+        return directions
 
     def calculate_destination(self, character, direction):
         if direction == 'up':
@@ -146,12 +166,12 @@ class GameManager:
         else:
             return False
 
-    def check_other_characters(self, character, characters):
-        for char in characters:
-            pass
-        #check for other characters
-        #character.step(direction)
-        #if hero x monster -> fight
+    def check_monsters(self, monsters, destination_x, destination_y):
+        for monster in monsters:
+            if monster.x == destination_x and monster.y == destination_y:
+                return True
+        else:
+            return False
 
     def check_fight(self, attacker, defender):
         if attacker.on_tile == defender.on_tile:
