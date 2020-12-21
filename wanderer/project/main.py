@@ -56,6 +56,7 @@ class App:
 
     def game_turn(self, direction):
         self.game_manager.set_hero_position(self.area, self.canvas, self.hero, direction, self.monsters)
+        self.label.config(text=self.hero.introduce())
         #game_manager.check_next_area(area, canvas, characters)
 
 print("Welcome to the Wanderer game! Let's play!")

@@ -74,21 +74,18 @@ class GameManager:
         if is_wall == True:
             print('Ouch! Watch where you are going!')
             return
-        #elif has_monster == True:
-            #pass
-            #fight
         if (destination_x >= 0 and destination_x < area.size
             and destination_y >= 0 and destination_y < area.size):
-            #for tile in area.tiles:
-                #tile.has_hero = False
-                #if tile.x == destination_x and tile.y == destination_y:
-                    #tile.has_hero = True
+            #set old tile has_hero to False
             hero.x, hero.y = destination_x, destination_y
             area.draw_character(canvas, hero)
             #set tile has_hero to true
         else:
             print('The edge has been reached!')
             return
+        has_monster = self.check_monsters(monsters, destination_x, destination_y)
+        if has_monster != False:
+            self.fight(hero, has_monster)
         self.check_monster_move(area, canvas, monsters)
 
     def check_monster_move(self, area, canvas, monsters):
@@ -102,11 +99,12 @@ class GameManager:
         #print(monster.name, directions)
         direction = directions[randrange(len(directions))]
         destination_x, destination_y = self.calculate_destination(monster, direction)
+        #check old tile has_monster to false
         monster.x, monster.y = destination_x, destination_y
         area.draw_character(canvas, monster)
         #check hero
         #print('turn done ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
-        #set tile has_monster to true
+        #set new tile has_monster to true
 
     def get_possible_moves(self, area, monster, monsters):
         directions = ['up', 'down', 'left', 'right']
@@ -120,7 +118,7 @@ class GameManager:
                 bad_directions.append(direction)
                 continue
             has_monster = self.check_monsters(monsters, destination_x, destination_y)
-            if has_monster == True:
+            if has_monster != False:
                 #print('nope another monster ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
                 bad_directions.append(direction)
                 continue
@@ -129,16 +127,15 @@ class GameManager:
                 #print('nope edge ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
                 bad_directions.append(direction)
                 continue
-            if len(directions) == 0:
-                monster.x, monster.y = area.free_tiles[0][0].x, area.free_tiles[0][0].y
-                print('monster is trapped')
-                break
-                #self.kill(monster)
         if len(bad_directions) != 0:
             for item in bad_directions:
                 directions.remove(item)
                 #print(item)
                 #print(directions)
+        if len(directions) == 0:
+            monster.x, monster.y = area.free_tiles[0][0].x, area.free_tiles[0][0].y
+            print('monster is trapped')
+            self.get_possible_moves(area, monster, monsters)
         return directions
 
     def calculate_destination(self, character, direction):
@@ -169,24 +166,24 @@ class GameManager:
     def check_monsters(self, monsters, destination_x, destination_y):
         for monster in monsters:
             if monster.x == destination_x and monster.y == destination_y:
-                return True
+                return monster
         else:
             return False
 
-    def check_fight(self, attacker, defender):
-        if attacker.on_tile == defender.on_tile:
-            self.fight(attacker, defender)
-
     def fight(self, attacker, defender):
         while attacker.current_health > 0 and defender.current_health > 0:
-            attacker.strike(defender)
+            attacker.strike(attacker, defender)
+            print(attacker.name + ' has striked')
             if defender.current_health <= 0:
                 print('defender died')
-                #self.kill(defender)
-            defender.strike(attacker)
+                self.kill(defender)
+                return
+            defender.strike(defender, attacker)
+            print(defender.name + ' has striked back')
             if attacker.current_health <= 0:
                 print('attacker died')
-                #self.kill(attacker)
+                self.kill(attacker)
+                return
 
     def kill(self, character):
         del character

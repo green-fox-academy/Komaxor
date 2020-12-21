@@ -25,8 +25,8 @@ class Character:
     def get_image(self):
         return ImageTk.PhotoImage(Image.open(self.image_path))
 
-    def strike(self, defender):
-        defender.current_health -= self.strike_point
+    def strike(self, attacker, defender):
+        defender.current_health -= attacker.strike_point
         defender.check_death()
 
     def check_death(self):
