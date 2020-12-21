@@ -14,7 +14,7 @@ class Character:
         self.y = 0
         self.image_path = ''
 
-    def rng(self, min, max):
+    def rng(self, min=1, max=6):
         return randrange(min, max)
 
     def introduce(self):
@@ -27,11 +27,3 @@ class Character:
 
     def strike(self, attacker, defender):
         defender.current_health -= attacker.strike_point
-        defender.check_death()
-
-    def check_death(self):
-        if self.current_health <= 0:
-            if self.__class__() == 'Monster':
-                return "Monster successfully destroyed!"
-            if self.__class__() == 'Hero':
-                return "You died!"

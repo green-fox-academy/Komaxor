@@ -1,4 +1,3 @@
-from random import randrange
 from character import Character
 
 class Hero(Character):
@@ -6,10 +5,10 @@ class Hero(Character):
     def __init__(self):
         super().__init__()
         self.name = 'Hero'
-        self.max_health = 20 + 3 * super().rng(1, 6)
+        self.max_health = 20 + 3 * super().rng()
         self.current_health = self.max_health
-        self.def_point = 2 * super().rng(1, 6)
-        self.strike_point = 5 + super().rng(1, 6)
+        self.def_point = 2 * super().rng()
+        self.strike_point = 5 + super().rng()
         self.image_down = "project/assets/hero-down.gif"
         self.image_up = "project/assets/hero-up.gif"
         self.image_left = "project/assets/hero-left.gif"
@@ -27,13 +26,13 @@ class Hero(Character):
             self.image_path = self.image_right
 
     def level_up(self):
-        self.max_health += super().rng(1, 6)
-        #self.current_health += super().rng()
-        self.def_point += super().rng(1, 6)
-        self.strike_point += super().rng(1, 6)
+        self.max_health += super().rng()
+        #self.current_health += super().dice_rng(1, 6)
+        self.def_point += super().rng()
+        self.strike_point += super().rng()
 
     def restore_health(self):
-        random = randrange(1, 11)
+        random = super().rng(max=11)
         if random == 1:
             self.restore_health_full
         if random > 5:

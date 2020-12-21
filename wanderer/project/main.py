@@ -48,16 +48,18 @@ class App:
             direction = 'left'
         elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699: #D d right
             direction = 'right'
+        #elif e.keycode == 32: #NOTE when to fight?
+            #self.game_manager.fight(self.area, self.hero, self.monsters)
         #elif e.keycode == 3473435: exit game
         else:
-            print('Use the arrow keys or WASD to move')
+            print('Use the arrow keys or WASD to move and space to fight')
             return
         self.game_turn(direction)
 
     def game_turn(self, direction):
         self.game_manager.set_hero_position(self.area, self.canvas, self.hero, direction, self.monsters)
         self.label.config(text=self.hero.introduce())
-        #game_manager.check_next_area(area, canvas, characters)
+        #self.game_manager.check_next_area(self.area, self.canvas, self.characters)
 
 print("Welcome to the Wanderer game! Let's play!")
 print("Use the arrow keys or WASD to move the hero.")
