@@ -8,10 +8,14 @@ class GameManager:
 
     def __init__(self):
         self.area_number = 1
+        self.area = Area()
+        self.hero = Hero()
+        self.characters = self.create_characters()
+        self.monsters = self.characters[1:]
 
-    def create_characters(self, hero):
+    def create_characters(self):
         characters = []
-        characters.append(hero)
+        characters.append(self.hero)
         monsters = self.create_monsters()
         for i in range(0, len(monsters)):
             characters.append(monsters[i])
@@ -23,8 +27,8 @@ class GameManager:
         boss.level = self.area_number
         monsters.append(boss)
         skeletons = []
-        skeleton_number = randrange(2, 5)
-        for i in range(skeleton_number):
+        number_of_skeletons = randrange(2, 5)
+        for i in range(number_of_skeletons):
             skeletons.append(Skeleton('Skeleton ' + str(i + 1)))
         skeletons[0].has_key == True
         for skeleton in skeletons:
@@ -32,8 +36,8 @@ class GameManager:
             monsters.append(skeleton)
         return monsters
 
-    def get_stats(self, characters):
-        for character in characters:
+    def get_stats(self):
+        for character in self.characters:
             print(character.introduce())
 
     def get_tile_stats(self, tile):
@@ -41,99 +45,101 @@ class GameManager:
         print(tile.has_hero)
         print(tile.has_monster)
 
-    def set_free_tiles(self, area):
-        area.free_tiles = []
-        for tile in area.tiles:
+    def set_free_tiles(self):
+        self.area.free_tiles = []
+        for tile in self.area.tiles:
             #self.get_tile_stats(tile)
-            if tile[0].walkable == True and tile[0].has_hero == False and tile[0].has_monster == False:
-                area.free_tiles.append((tile[0], (tile[0].x, tile[0].y)))
+            if (tile[0].walkable == True and tile[0].has_hero == False
+                and tile[0].has_monster == False):
+                self.area.free_tiles.append((tile[0], (tile[0].x, tile[0].y)))
 
-    def spawn_characters(self, area, canvas, characters):
-        hero = characters[0]
-        monsters = characters[1:]
-        area.character_images = {}
-        self.spawn_hero(area, canvas, hero)
-        self.spawn_monsters(area, canvas, monsters)
+    def spawn_characters(self, canvas):
+        self.area.character_images = {}
+        self.spawn_hero(canvas)
+        self.spawn_monsters(canvas)
 
-    def spawn_hero(self, area, canvas, hero):
-        self.set_free_tiles(area)
-        hero.image_path = hero.image_down
-        area.draw_character(canvas, hero)
-        tile = area.tiles[0][0]
+    def spawn_hero(self, canvas):
+        self.set_free_tiles()
+        self.hero.image_path = self.hero.image_down
+        self.area.draw_character(canvas, self.hero)
+        tile = self.area.tiles[0][0]
         tile.has_hero = True
 
-    def spawn_monsters(self, area, canvas, monsters):
-        for monster in monsters:
-            self.set_free_tiles(area)
-            tile = area.free_tiles[randrange(len(area.free_tiles))]
+    def spawn_monsters(self, canvas):
+        for monster in self.monsters:
+            self.set_free_tiles()
+            tile = self.area.free_tiles[randrange(len(self.area.free_tiles))]
             monster.y = tile[1][0]
             monster.x = tile[1][1]
-            area.draw_character(canvas, monster)
+            self.area.draw_character(canvas, monster)
             tile[0].has_monster = True
 
-    def get_tile(self, area, character, x=None, y=None):
-        return [i for i in area.tiles if [character.x, character.y] in i]
+    def get_character_tile(self, character):
+        return [i for i in self.area.tiles if [character.x, character.y] in i]
 
-    def set_hero_position(self, area, canvas, hero, direction, monsters):
-        hero.turn(direction)
-        area.draw_character(canvas, hero)
-        destination_x, destination_y = self.calculate_destination(hero, direction)
-        is_wall = self.check_walls(area, destination_x, destination_y)
+    def set_hero_position(self, canvas, direction):
+        self.hero.turn(direction)
+        self.area.draw_character(canvas, self.hero)
+        destination_x, destination_y = self.calculate_destination(self.hero, direction) #NOTE how to decrease?
+        is_wall = self.check_walls(destination_x, destination_y)
         if is_wall == True:
             print('Ouch! Watch where you are going!')
             return
-        if (destination_x >= 0 and destination_x < area.size
-            and destination_y >= 0 and destination_y < area.size):
-            self.get_tile(area, hero)[0][0].has_hero = False
-            hero.x, hero.y = destination_x, destination_y
-            area.draw_character(canvas, hero)
-            self.get_tile(area, hero)[0][0].has_hero = True
+        if (destination_x >= 0 and destination_x < self.area.size
+            and destination_y >= 0 and destination_y < self.area.size):
+            self.get_character_tile(self.hero)[0][0].has_hero = False
+            self.hero.x, self.hero.y = destination_x, destination_y
+            self.area.draw_character(canvas, self.hero)
+            self.get_character_tile(self.hero)[0][0].has_hero = True
         else:
             print('The edge has been reached!')
             return
-        has_monster = self.check_monsters(monsters, destination_x, destination_y)
+        has_monster = self.check_monsters(destination_x, destination_y)
         if has_monster != False:
-            self.fight(area, hero, has_monster)
-        self.check_monster_move(area, canvas, hero, monsters)
+            self.fight(self.hero, has_monster)
+            self.hero.level_up()
+        self.check_monster_move(canvas)
 
-    def check_monster_move(self, area, canvas, hero, monsters):
-        if area.turn_count % 2 != 0:
-            for monster in monsters:
-                self.set_monster_position(area, canvas, hero, monster, monsters)
-        area.increase_turn_count()
+    def check_monster_move(self, canvas):
+        if self.area.turn_count % 2 != 0:
+            for monster in self.monsters:
+                self.set_monster_position(canvas, monster)
+        self.area.increase_turn_count()
 
-    def set_monster_position(self, area, canvas, hero, monster, monsters):
-        directions = self.get_possible_moves(area, monster, monsters)
+    def set_monster_position(self, canvas, monster):
+        directions = self.get_possible_moves(monster)
         #print(monster.name, directions)
         direction = directions[randrange(len(directions))]
-        destination_x, destination_y = self.calculate_destination(monster, direction)
-        self.get_tile(area, monster)[0][0].has_monster = False
+        destination_x, destination_y = self.calculate_destination(monster, direction) #NOTE how to decrease?
+        self.get_character_tile(monster)[0][0].has_monster = False
         monster.x, monster.y = destination_x, destination_y
-        area.draw_character(canvas, monster)
-        self.get_tile(area, monster)[0][0].has_monster = True
-        if self.get_tile(area, monster)[0][0].has_hero == True:
-            self.fight(area, monster, hero)
-            hero.level_up()
+        self.area.draw_character(canvas, monster)
+        self.get_character_tile(monster)[0][0].has_monster = True
+        if self.get_character_tile(monster)[0][0].has_hero == True:
+            self.fight(monster, self.hero)
+            self.hero.level_up()
         #print('turn done ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
 
-    def get_possible_moves(self, area, monster, monsters):
+    def get_possible_moves(self, monster):
         directions = ['up', 'down', 'left', 'right']
         bad_directions = []
         for direction in directions:
             #print(direction)
-            destination_x, destination_y = self.calculate_destination(monster, direction)
-            is_wall = self.check_walls(area, destination_x, destination_y)
+            destination_x, destination_y = self.calculate_destination(monster, direction) #NOTE how to decrease?
+            is_wall = self.check_walls(destination_x, destination_y)
             if is_wall == True:
                 #print('nope wall ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
                 bad_directions.append(direction)
                 continue
-            has_monster = self.check_monsters(monsters, destination_x, destination_y)
+            has_monster = self.check_monsters(destination_x, destination_y)
             if has_monster != False:
                 #print('nope another monster ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
                 bad_directions.append(direction)
                 continue
-            if (destination_x < 0 or destination_x > area.size - area.tile_size
-                or destination_y < 0 or destination_y > area.size - area.tile_size):
+            if (destination_x < 0
+                or destination_x > self.area.size - self.area.tile_size
+                or destination_y < 0
+                or destination_y > self.area.size - self.area.tile_size):
                 #print('nope edge ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
                 bad_directions.append(direction)
                 continue
@@ -144,10 +150,11 @@ class GameManager:
                 #print(directions)
         if len(directions) == 0:
             #print(monster.x, monster.y)
-            monster.x, monster.y = area.free_tiles[0][0].x, area.free_tiles[0][0].y
+            monster.x = self.area.free_tiles[0][0].x #NOTE decreased from 1 line
+            monster.y = self.area.free_tiles[0][0].y
             #print(monster.x, monster.y)
             print('monster is trapped') #NOTE does not get out
-            self.get_possible_moves(area, monster, monsters)
+            self.get_possible_moves(monster)
         return directions
 
     def calculate_destination(self, character, direction):
@@ -168,35 +175,35 @@ class GameManager:
             x = character.x
         return (x, y)
 
-    def check_walls(self, area, destination_x, destination_y):
-        if (((destination_y * area.number_of_tiles) / area.tile_size) +
-            (destination_x / area.tile_size) in area.walls):
+    def check_walls(self, destination_x, destination_y):
+        if (((destination_y * self.area.number_of_tiles) / self.area.tile_size)
+            + (destination_x / self.area.tile_size) in self.area.walls): #NOTE break OK?
             return True
         else:
             return False
 
-    def check_monsters(self, monsters, destination_x, destination_y):
-        for monster in monsters:
+    def check_monsters(self, destination_x, destination_y):
+        for monster in self.monsters:
             if monster.x == destination_x and monster.y == destination_y:
                 return monster
         else:
             return False
 
-    def fight(self, area, attacker, defender):
+    def fight(self, attacker, defender):
         while attacker.current_health > 0 and defender.current_health > 0:
             attacker.strike(attacker, defender)
             #print(attacker.name + ' has striked')
-            if self.check_death(area, defender) == True:
+            if self.check_death(defender) == True:
                 return
             defender.strike(defender, attacker)
             #print(defender.name + ' has striked back')
-            self.check_death(area, attacker)
+            self.check_death(attacker)
 
-    def check_death(self, area, receiver):
+    def check_death(self, receiver):
         if receiver.current_health <= 0:
             print(receiver.name + " died")
             #print(area.character_images)
-            del area.character_images[receiver.name] #NOTE does not work
+            del self.area.character_images[receiver.name] #NOTE does not work
             #print(area.character_images)
             self.kill(receiver)
             return True
@@ -206,28 +213,28 @@ class GameManager:
     def kill(self, character):
         del character #NOTE does not work
 
-    def check_next_area(self, area, canvas, characters):
-        print(characters)
-        print(characters[1].__class__.__name__)
-        if characters[1].__class__() == "Boss":
+    def check_next_area(self, canvas):
+        print(self.characters)
+        print(self.characters[1].__class__.__name__)
+        if self.characters[1].__class__() == "Boss":
             print('boss alive')
             #return
-        print(characters[2:])
-        for skeleton in characters[2:]:
+        print(self.characters[2:])
+        for skeleton in self.characters[2:]:
             if skeleton.has_key == True:
                 print(skeleton.name + ' has key')
                 #return
         print('next area triggered')
-        #self.next_area(area, canvas, characters)
+        #self.next_area(canvas)
 
-    def next_area(self, area, canvas, characters):
-        monsters = characters[1:]
-        self.clear_area(area, monsters)
+    def next_area(self, canvas):
+        self.clear_area()
         self.area_number += 1
-        characters = self.create_characters(characters[0])
-        self.spawn_characters(area, canvas, characters)
+        self.hero.restore_health()
+        self.characters = self.create_characters()
+        self.spawn_characters(canvas)
 
-    def clear_area(self, area, monsters):
-        for monster in monsters:
+    def clear_area(self):
+        for monster in self.monsters:
             del monster
-            area.character_images = {}
+            self.area.character_images = {}

@@ -1,36 +1,24 @@
-from hero import Hero
-from skeleton import Skeleton
-from boss import Boss
 from game_manager import GameManager
-from PIL import Image, ImageTk
-from tiles import Floor, Wall
 from pynput.keyboard import Key, Listener
-from area import Area
-from tkinter import *
+from tkinter import Tk, Canvas, Label
 
 class App:
 
     def __init__(self):
         self.root = Tk()
         self.root.title("Wanderer by Mark Ambrus")
-        self.area = Area()
         self.game_manager = GameManager()
-        self.hero = Hero()
 
-        self.size = self.area.size
-        self.height = self.area.size + 50
+        self.size = self.game_manager.area.size
         self.canvas = Canvas(self.root, width=self.size, height=self.size)
         self.canvas.pack()
-        self.area.draw_map(self.canvas)
+        self.game_manager.area.draw_map(self.canvas)
 
-        self.characters = self.game_manager.create_characters(self.hero)
-        self.monsters = self.characters[1:]
-
-        self.label = Label(text=self.hero.introduce())
+        self.label = Label(text=self.game_manager.hero.introduce())
         self.label.pack()
 
-        self.game_manager.spawn_characters(self.area, self.canvas, self.characters)
-        #self.game_manager.get_stats(self.characters)
+        self.game_manager.spawn_characters(self.canvas)
+        #self.game_manager.get_stats()
 
         self.canvas.bind("<KeyPress>", self.on_key_press)
         self.canvas.focus_set()
@@ -38,28 +26,35 @@ class App:
         self.root.mainloop()
 
     def on_key_press(self, e):
-        #global direction
+        #global direction #NOTE global or local and pass?
         #NOTE use dictionary as switch?
-        if e.keycode == 87 or e.keycode == 119 or e.keycode == 8320768: #W w up
+        #W or w or up arrow key
+        if e.keycode == 87 or e.keycode == 119 or e.keycode == 8320768:
             direction = 'up'
-        elif e.keycode == 83 or e.keycode == 115 or e.keycode == 8255233: #S s down
+        #S or s or down arrow key
+        elif e.keycode == 83 or e.keycode == 115 or e.keycode == 8255233:
             direction = 'down'
-        elif e.keycode == 65 or e.keycode == 97 or e.keycode == 8124162: #A a left
+        #A or a or left arrow key
+        elif e.keycode == 65 or e.keycode == 97 or e.keycode == 8124162:
             direction = 'left'
-        elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699: #D d right
+        #D or d or right arrow key
+        elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699:
             direction = 'right'
+        #space key
         #elif e.keycode == 32: #NOTE when to fight?
-            #self.game_manager.fight(self.area, self.hero, self.monsters)
-        #elif e.keycode == 3473435: exit game
+            #self.game_manager.fight(new logic)
+        #esc key #NOTE needed?
+        #elif e.keycode == 3473435:
+        #exit game
         else:
             print('Use the arrow keys or WASD to move and space to fight')
             return
         self.game_turn(direction)
 
     def game_turn(self, direction):
-        self.game_manager.set_hero_position(self.area, self.canvas, self.hero, direction, self.monsters)
-        self.label.config(text=self.hero.introduce())
-        #self.game_manager.check_next_area(self.area, self.canvas, self.characters)
+        self.game_manager.set_hero_position(self.canvas, direction)
+        self.label.config(text=self.game_manager.hero.introduce())
+        #self.game_manager.check_next_area(self.canvas)
 
 print("Welcome to the Wanderer game! Let's play!")
 print("Use the arrow keys or WASD to move the hero.")
