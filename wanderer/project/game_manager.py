@@ -1,10 +1,12 @@
 from random import randrange
 from area import Area
 from hero import Hero
+from monster import Monster
 from skeleton import Skeleton
 from boss import Boss
 
 class GameManager:
+#TODO index error handling
 
     def __init__(self):
         self.area_number = 1
@@ -27,7 +29,7 @@ class GameManager:
         boss.level = self.area_number
         monsters.append(boss)
         skeletons = []
-        number_of_skeletons = randrange(2, 5)
+        number_of_skeletons = randrange(42, 50)
         for i in range(number_of_skeletons):
             skeletons.append(Skeleton('Skeleton ' + str(i + 1)))
         skeletons[0].has_key = True
@@ -85,8 +87,7 @@ class GameManager:
         if is_wall == True:
             print('Ouch! Watch where you are going!')
             return
-        if (destination_x >= 0 and destination_x < self.area.size
-            and destination_y >= 0 and destination_y < self.area.size):
+        if self.check_map(destination_x, destination_y):
             self.get_character_tile(self.hero)[0][0].has_hero = False
             self.hero.x, self.hero.y = destination_x, destination_y
             self.area.draw_character(canvas, self.hero)
@@ -108,7 +109,6 @@ class GameManager:
 
     def set_monster_position(self, canvas, monster):
         directions = self.get_possible_moves(monster)
-        #print(monster.name, directions)
         direction = directions[randrange(len(directions))]
         destination_x, destination_y = self.calculate_destination(monster, direction) #NOTE how to decrease?
         self.get_character_tile(monster)[0][0].has_monster = False
@@ -118,43 +118,30 @@ class GameManager:
         if self.get_character_tile(monster)[0][0].has_hero == True:
             self.fight(monster, self.hero)
             self.hero.level_up()
-        #print('turn done ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
 
     def get_possible_moves(self, monster):
         directions = ['up', 'down', 'left', 'right']
         bad_directions = []
         for direction in directions:
-            #print(direction)
             destination_x, destination_y = self.calculate_destination(monster, direction) #NOTE how to decrease?
             is_wall = self.check_walls(destination_x, destination_y)
             if is_wall == True:
-                #print('nope wall ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
+                bad_directions.append(direction)
+                continue
+            if self.check_map(destination_x, destination_y) == False:
                 bad_directions.append(direction)
                 continue
             has_monster = self.check_monsters(destination_x, destination_y)
             if has_monster != False:
-                #print('nope another monster ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
-                bad_directions.append(direction)
-                continue
-            if (destination_x < 0
-                or destination_x > self.area.size - self.area.tile_size
-                or destination_y < 0
-                or destination_y > self.area.size - self.area.tile_size):
-                #print('nope edge ' + monster.name, direction, destination_x / area.tile_size, destination_y / area.tile_size)
                 bad_directions.append(direction)
                 continue
         if len(bad_directions) != 0:
             for item in bad_directions:
                 directions.remove(item)
-                #print(item)
-                #print(directions)
         if len(directions) == 0:
-            #print(monster.x, monster.y)
-            monster.x = self.area.free_tiles[0][0].x #NOTE decreased from 1 line
-            monster.y = self.area.free_tiles[0][0].y
-            #print(monster.x, monster.y)
-            print('monster is trapped') #NOTE does not get out
-            self.get_possible_moves(monster)
+            #print('monster is trapped')
+            self.get_character_tile(monster)[0][0].has_monster = False
+            return ['stay']
         return directions
 
     def calculate_destination(self, character, direction):
@@ -177,10 +164,19 @@ class GameManager:
 
     def check_walls(self, destination_x, destination_y):
         if (((destination_y * self.area.number_of_tiles) / self.area.tile_size)
-            + (destination_x / self.area.tile_size) in self.area.walls): #NOTE break OK?
+            + (destination_x / self.area.tile_size) in self.area.walls): #NOTE linebreak OK?
             return True
         else:
             return False
+
+    def check_map(self, destination_x, destination_y):
+        if (destination_x < 0
+            or destination_x > self.area.size - self.area.tile_size
+            or destination_y < 0
+            or destination_y > self.area.size - self.area.tile_size):
+            return False
+        else:
+            return True
 
     def check_monsters(self, destination_x, destination_y):
         for monster in self.monsters:
@@ -192,19 +188,15 @@ class GameManager:
     def fight(self, attacker, defender):
         while attacker.current_health > 0 and defender.current_health > 0:
             attacker.strike(attacker, defender)
-            #print(attacker.name + ' has striked')
             if self.check_death(defender) == True:
                 return
             defender.strike(defender, attacker)
-            #print(defender.name + ' has striked back')
             self.check_death(attacker)
 
     def check_death(self, receiver):
         if receiver.current_health <= 0:
             print(receiver.name + " died")
-            #print(area.character_images)
-            del self.area.character_images[receiver.name] #NOTE does not work
-            #print(area.character_images)
+            del self.area.character_images[receiver.name]
             self.kill(receiver)
             return True
         else:
@@ -212,25 +204,25 @@ class GameManager:
 
     def kill(self, character):
         self.characters.remove(character)
-        self.monsters.remove(character)
-        del character #NOTE does not work
+        if isinstance(character, Monster):
+            self.monsters.remove(character)
+        else:
+            print('game over')
+        #del character #NOTE needed?
 
     def check_next_area(self, canvas):
         if self.check_boss() == False and self.check_key() == False:
-            #print('next area triggered')
             self.next_area(canvas)
 
     def check_boss(self):
         for monster in self.monsters:
             if monster.__class__.__name__ == "Boss":
-                #print('boss is still alive')
                 return True
         return False
 
     def check_key(self):
         for monster in self.monsters:
             if monster.has_key == True:
-                #print(monster.name + ' has the key')
                 return True
         return False
 
