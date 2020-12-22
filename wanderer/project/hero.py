@@ -9,7 +9,7 @@ class Hero(Character):
         self.current_health = self.max_health
         self.def_point = 2 * super().rng()
         self.strike_point = 5 + super().rng()
-        self.image_down = "project/assets/hero-down.gif"
+        self.image_down = "project/assets/hero-down.gif" #NOTE should I remove pngs?
         self.image_up = "project/assets/hero-up.gif"
         self.image_left = "project/assets/hero-left.gif"
         self.image_right = "project/assets/hero-right.gif"
@@ -27,13 +27,12 @@ class Hero(Character):
 
     def level_up(self):
         self.max_health += super().rng()
-        #self.current_health += super().dice_rng(1, 6)
+        #self.current_health += super().rng()
         self.def_point += super().rng()
         self.strike_point += super().rng()
 
     def restore_health(self):
         random = super().rng(max=11)
-        print(random)
         if random == 1:
             self.restore_health_full()
         if random > 5:

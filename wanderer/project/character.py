@@ -7,7 +7,7 @@ class Character:
         self.name = ''
         self.level = 1
         self.max_health = 0
-        self.current_health = 0
+        self.current_health = self.max_health
         self.def_point = 0
         self.strike_point = 0
         self.x = 0

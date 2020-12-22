@@ -30,7 +30,7 @@ class GameManager:
         number_of_skeletons = randrange(2, 5)
         for i in range(number_of_skeletons):
             skeletons.append(Skeleton('Skeleton ' + str(i + 1)))
-        skeletons[0].has_key == True
+        skeletons[0].has_key = True
         for skeleton in skeletons:
             skeleton.level = self.area_number
             monsters.append(skeleton)
@@ -211,30 +211,34 @@ class GameManager:
             return False
 
     def kill(self, character):
+        self.characters.remove(character)
+        self.monsters.remove(character)
         del character #NOTE does not work
 
     def check_next_area(self, canvas):
-        print(self.characters)
-        print(self.characters[1].__class__.__name__)
-        if self.characters[1].__class__() == "Boss":
-            print('boss alive')
-            #return
-        print(self.characters[2:])
-        for skeleton in self.characters[2:]:
-            if skeleton.has_key == True:
-                print(skeleton.name + ' has key')
-                #return
-        print('next area triggered')
-        #self.next_area(canvas)
+        if self.check_boss() == False and self.check_key() == False:
+            #print('next area triggered')
+            self.next_area(canvas)
+
+    def check_boss(self):
+        for monster in self.monsters:
+            if monster.__class__.__name__ == "Boss":
+                #print('boss is still alive')
+                return True
+        return False
+
+    def check_key(self):
+        for monster in self.monsters:
+            if monster.has_key == True:
+                #print(monster.name + ' has the key')
+                return True
+        return False
 
     def next_area(self, canvas):
-        self.clear_area()
         self.area_number += 1
+        self.area = Area()
         self.hero.restore_health()
         self.characters = self.create_characters()
+        self.monsters = self.characters[1:]
+        self.area.draw_map(canvas)
         self.spawn_characters(canvas)
-
-    def clear_area(self):
-        for monster in self.monsters:
-            del monster
-            self.area.character_images = {}
