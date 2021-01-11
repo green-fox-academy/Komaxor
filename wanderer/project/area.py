@@ -1,6 +1,6 @@
 from tiles import Wall, Floor
 from PIL import Image
-from tkinter.constants import NW #NOTE which library?
+from tkinter.constants import NW
 
 class Area:
 

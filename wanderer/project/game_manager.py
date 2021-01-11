@@ -14,6 +14,7 @@ class GameManager:
         self.hero = Hero()
         self.characters = self.create_characters()
         self.monsters = self.characters[1:]
+        self.kill_count = 0
 
     def create_characters(self):
         characters = []
@@ -29,7 +30,7 @@ class GameManager:
         boss.level = self.area_number
         monsters.append(boss)
         skeletons = []
-        number_of_skeletons = randrange(42, 50)
+        number_of_skeletons = randrange(2, 5)
         for i in range(number_of_skeletons):
             skeletons.append(Skeleton('Skeleton ' + str(i + 1)))
         skeletons[0].has_key = True
@@ -42,15 +43,9 @@ class GameManager:
         for character in self.characters:
             print(character.introduce())
 
-    def get_tile_stats(self, tile):
-        print(tile.walkable)
-        print(tile.has_hero)
-        print(tile.has_monster)
-
     def set_free_tiles(self):
         self.area.free_tiles = []
         for tile in self.area.tiles:
-            #self.get_tile_stats(tile)
             if (tile[0].walkable == True and tile[0].has_hero == False
                 and tile[0].has_monster == False):
                 self.area.free_tiles.append((tile[0], (tile[0].x, tile[0].y)))
@@ -85,7 +80,7 @@ class GameManager:
         destination_x, destination_y = self.calculate_destination(self.hero, direction) #NOTE how to decrease?
         is_wall = self.check_walls(destination_x, destination_y)
         if is_wall == True:
-            print('Ouch! Watch where you are going!')
+            #print('Ouch! Watch where you are going!')
             return
         if self.check_map(destination_x, destination_y):
             self.get_character_tile(self.hero)[0][0].has_hero = False
@@ -93,7 +88,7 @@ class GameManager:
             self.area.draw_character(canvas, self.hero)
             self.get_character_tile(self.hero)[0][0].has_hero = True
         else:
-            print('The edge has been reached!')
+            #print('This is the end of the world!')
             return
         has_monster = self.check_monsters(destination_x, destination_y)
         if has_monster != False:
@@ -139,7 +134,6 @@ class GameManager:
             for item in bad_directions:
                 directions.remove(item)
         if len(directions) == 0:
-            #print('monster is trapped')
             self.get_character_tile(monster)[0][0].has_monster = False
             return ['stay']
         return directions
@@ -195,20 +189,18 @@ class GameManager:
 
     def check_death(self, receiver):
         if receiver.current_health <= 0:
-            print(receiver.name + " died")
+            #print(receiver.name + " died")
             del self.area.character_images[receiver.name]
-            self.kill(receiver)
+            self.kill_monster(receiver)
             return True
         else:
             return False
 
-    def kill(self, character):
+    def kill_monster(self, character):
         self.characters.remove(character)
         if isinstance(character, Monster):
             self.monsters.remove(character)
-        else:
-            print('game over')
-        #del character #NOTE needed?
+            self.kill_count += 1
 
     def check_next_area(self, canvas):
         if self.check_boss() == False and self.check_key() == False:
@@ -216,7 +208,7 @@ class GameManager:
 
     def check_boss(self):
         for monster in self.monsters:
-            if monster.__class__.__name__ == "Boss":
+            if isinstance(monster, Boss):
                 return True
         return False
 

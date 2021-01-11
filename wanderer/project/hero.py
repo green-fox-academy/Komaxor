@@ -9,7 +9,7 @@ class Hero(Character):
         self.current_health = self.max_health
         self.def_point = 2 * super().rng()
         self.strike_point = 5 + super().rng()
-        self.image_down = "project/assets/hero-down.gif" #NOTE should I remove pngs?
+        self.image_down = "project/assets/hero-down.gif"
         self.image_up = "project/assets/hero-up.gif"
         self.image_left = "project/assets/hero-left.gif"
         self.image_right = "project/assets/hero-right.gif"

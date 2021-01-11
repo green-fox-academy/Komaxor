@@ -14,8 +14,17 @@ class App:
         self.canvas.pack()
         self.game_manager.area.draw_map(self.canvas)
 
-        self.label = Label(text=self.game_manager.hero.introduce())
-        self.label.pack()
+        self.hero_stat_bar = Label(text=self.game_manager.hero.introduce())
+        self.hero_stat_bar.pack()
+        #NOTE how to break lines below
+        self.game_description = Label(text="Welcome to the Wanderer game! Let's play! Use the arrow keys or WASD to move the hero.\n Cross path with monsters to fight them. Collect the key and kill the boss to get to the next level.")
+        self.game_description.pack()
+
+        self.progress_info = Label(text="Area: " +
+                                str(self.game_manager.area_number) + " | " +
+                                str(self.game_manager.kill_count) +
+                                " monsters slayed.")
+        self.progress_info.pack()
 
         self.game_manager.spawn_characters(self.canvas)
         #self.game_manager.get_stats()
@@ -42,22 +51,29 @@ class App:
             direction = 'right'
         #space key
         #elif e.keycode == 32: #NOTE when to fight?
-            #self.game_manager.fight(new logic)
-        #esc key #NOTE needed?
-        #elif e.keycode == 3473435:
-        #exit game
+            #self.game_manager.fight(hero, monster_in_place new logic)
         else:
-            print('Use the arrow keys or WASD to move and space to fight')
+            #print('Use the arrow keys or WASD to move and space to fight')
             return
         self.game_turn(direction)
 
     def game_turn(self, direction):
         self.game_manager.set_hero_position(self.canvas, direction)
-        self.label.config(text=self.game_manager.hero.introduce())
+        if self.game_manager.hero.current_health <= 0:
+            print('Game Over')
+            self.game_manager = GameManager()
+            self.game_manager.area.draw_map(self.canvas)
+            self.game_manager.spawn_characters(self.canvas)
+            self.config_labels()
+            return
         self.game_manager.check_next_area(self.canvas)
+        self.config_labels()
 
-print("Welcome to the Wanderer game! Let's play!")
-print("Use the arrow keys or WASD to move the hero.")
-print("Cross path with monsters to fight them.")
-print("Collect the key and kill the boss to get to the next level.")
+    def config_labels(self):
+        self.progress_info.config(text="Area: " +
+                str(self.game_manager.area_number) + " | " +
+                str(self.game_manager.kill_count) +
+                " monsters slayed.")
+        self.hero_stat_bar.config(text=self.game_manager.hero.introduce())
+
 app = App()
