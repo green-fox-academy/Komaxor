@@ -35,18 +35,18 @@ class Hero(Character):
         random = super().rng(max=11)
         if random == 1:
             self.restore_health_full()
-        if random > 5:
+        elif random > 5:
             self.restore_health_tenth()
         else:
             self.restore_health_third()
         if self.current_health > self.max_health:
-            self.current_health = self.max_health
+            self.restore_health_full()
 
     def restore_health_full(self):
         self.current_health = self.max_health
 
     def restore_health_third(self):
-        self.current_health += self.max_health / 3
+        self.current_health += self.max_health / 3 #int
 
     def restore_health_tenth(self):
-        self.current_health += self.max_health / 10
+        self.current_health += self.max_health / 10 #int

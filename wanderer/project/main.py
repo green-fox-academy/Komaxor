@@ -16,8 +16,11 @@ class App:
 
         self.hero_stat_bar = Label(text=self.game_manager.hero.introduce())
         self.hero_stat_bar.pack()
-        #NOTE how to break lines below
-        self.game_description = Label(text="Welcome to the Wanderer game! Let's play! Use the arrow keys or WASD to move the hero.\n Cross path with monsters to fight them. Collect the key and kill the boss to get to the next level.")
+        self.game_description = Label(text=
+            """Welcome to the Wanderer game! Let's play!
+            Use the arrow keys or WASD to move the hero.
+            Cross path with monsters to fight them.
+            Collect the key and kill the boss to go to the next level.""")
         self.game_description.pack()
 
         self.progress_info = Label(text="Area: " +
@@ -27,7 +30,6 @@ class App:
         self.progress_info.pack()
 
         self.game_manager.spawn_characters(self.canvas)
-        #self.game_manager.get_stats()
 
         self.canvas.bind("<KeyPress>", self.on_key_press)
         self.canvas.focus_set()
@@ -35,8 +37,6 @@ class App:
         self.root.mainloop()
 
     def on_key_press(self, e):
-        #global direction #NOTE global or local and pass?
-        #NOTE use dictionary as switch?
         #W or w or up arrow key
         if e.keycode == 87 or e.keycode == 119 or e.keycode == 8320768:
             direction = 'up'
@@ -49,9 +49,6 @@ class App:
         #D or d or right arrow key
         elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699:
             direction = 'right'
-        #space key
-        #elif e.keycode == 32: #NOTE when to fight?
-            #self.game_manager.fight(hero, monster_in_place new logic)
         else:
             #print('Use the arrow keys or WASD to move and space to fight')
             return

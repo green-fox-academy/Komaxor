@@ -6,7 +6,6 @@ from skeleton import Skeleton
 from boss import Boss
 
 class GameManager:
-#TODO index error handling
 
     def __init__(self):
         self.area_number = 1
@@ -39,6 +38,7 @@ class GameManager:
             monsters.append(skeleton)
         return monsters
 
+#make some use
     def get_stats(self):
         for character in self.characters:
             print(character.introduce())
@@ -46,8 +46,8 @@ class GameManager:
     def set_free_tiles(self):
         self.area.free_tiles = []
         for tile in self.area.tiles:
-            if (tile[0].walkable == True and tile[0].has_hero == False
-                and tile[0].has_monster == False):
+            if (tile[0].walkable and not tile[0].has_hero
+                and not tile[0].has_monster):
                 self.area.free_tiles.append((tile[0], (tile[0].x, tile[0].y)))
 
     def spawn_characters(self, canvas):
@@ -66,6 +66,7 @@ class GameManager:
         for monster in self.monsters:
             self.set_free_tiles()
             tile = self.area.free_tiles[randrange(len(self.area.free_tiles))]
+            #sometimes monster spawns on top of hero
             monster.y = tile[1][0]
             monster.x = tile[1][1]
             self.area.draw_character(canvas, monster)
@@ -77,10 +78,10 @@ class GameManager:
     def set_hero_position(self, canvas, direction):
         self.hero.turn(direction)
         self.area.draw_character(canvas, self.hero)
-        destination_x, destination_y = self.calculate_destination(self.hero, direction) #NOTE how to decrease?
+        destination_x, destination_y = self.calculate_destination(self.hero,
+                                                                  direction)
         is_wall = self.check_walls(destination_x, destination_y)
-        if is_wall == True:
-            #print('Ouch! Watch where you are going!')
+        if is_wall:
             return
         if self.check_map(destination_x, destination_y):
             self.get_character_tile(self.hero)[0][0].has_hero = False
@@ -88,7 +89,6 @@ class GameManager:
             self.area.draw_character(canvas, self.hero)
             self.get_character_tile(self.hero)[0][0].has_hero = True
         else:
-            #print('This is the end of the world!')
             return
         has_monster = self.check_monsters(destination_x, destination_y)
         if has_monster != False:
@@ -105,12 +105,13 @@ class GameManager:
     def set_monster_position(self, canvas, monster):
         directions = self.get_possible_moves(monster)
         direction = directions[randrange(len(directions))]
-        destination_x, destination_y = self.calculate_destination(monster, direction) #NOTE how to decrease?
+        destination_x, destination_y = self.calculate_destination(monster,
+                                                                direction)
         self.get_character_tile(monster)[0][0].has_monster = False
         monster.x, monster.y = destination_x, destination_y
         self.area.draw_character(canvas, monster)
         self.get_character_tile(monster)[0][0].has_monster = True
-        if self.get_character_tile(monster)[0][0].has_hero == True:
+        if self.get_character_tile(monster)[0][0].has_hero:
             self.fight(monster, self.hero)
             self.hero.level_up()
 
@@ -118,12 +119,13 @@ class GameManager:
         directions = ['up', 'down', 'left', 'right']
         bad_directions = []
         for direction in directions:
-            destination_x, destination_y = self.calculate_destination(monster, direction) #NOTE how to decrease?
+            destination_x, destination_y = self.calculate_destination(monster,
+                                                                    direction)
             is_wall = self.check_walls(destination_x, destination_y)
-            if is_wall == True:
+            if is_wall:
                 bad_directions.append(direction)
                 continue
-            if self.check_map(destination_x, destination_y) == False:
+            if not self.check_map(destination_x, destination_y):
                 bad_directions.append(direction)
                 continue
             has_monster = self.check_monsters(destination_x, destination_y)
@@ -158,7 +160,7 @@ class GameManager:
 
     def check_walls(self, destination_x, destination_y):
         if (((destination_y * self.area.number_of_tiles) / self.area.tile_size)
-            + (destination_x / self.area.tile_size) in self.area.walls): #NOTE linebreak OK?
+            + (destination_x / self.area.tile_size) in self.area.walls):
             return True
         else:
             return False
@@ -182,14 +184,13 @@ class GameManager:
     def fight(self, attacker, defender):
         while attacker.current_health > 0 and defender.current_health > 0:
             attacker.strike(attacker, defender)
-            if self.check_death(defender) == True:
+            if self.check_death(defender):
                 return
             defender.strike(defender, attacker)
             self.check_death(attacker)
 
     def check_death(self, receiver):
         if receiver.current_health <= 0:
-            #print(receiver.name + " died")
             del self.area.character_images[receiver.name]
             self.kill_monster(receiver)
             return True
@@ -203,7 +204,7 @@ class GameManager:
             self.kill_count += 1
 
     def check_next_area(self, canvas):
-        if self.check_boss() == False and self.check_key() == False:
+        if not self.check_boss() and not self.check_key():
             self.next_area(canvas)
 
     def check_boss(self):
@@ -214,7 +215,7 @@ class GameManager:
 
     def check_key(self):
         for monster in self.monsters:
-            if monster.has_key == True:
+            if monster.has_key:
                 return True
         return False
 

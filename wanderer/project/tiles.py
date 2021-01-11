@@ -12,17 +12,3 @@ class Tile:
 
     def get_image(self):
         return ImageTk.PhotoImage(Image.open(self.image_path))
-
-class Floor(Tile):
-
-    def __init__(self):
-        super().__init__()
-        self.walkable = True
-        self.image_path = "project/assets/floor.gif"
-
-
-class Wall(Tile):
-
-    def __init__(self):
-        super().__init__()
-        self.image_path = "project/assets/wall.gif"
