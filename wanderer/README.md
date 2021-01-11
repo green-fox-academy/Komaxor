@@ -22,13 +22,18 @@ python3 main.py
 
 ## Code structure:
 
-!kepkent
+The app contains the following classes:
 App
 GameManager
 Area
 Tile
     Floor
     Wall
+Character
+    Hero
+    Monster
+        Boss
+        Skeleton
 
 
 In main.py there is the App class. It initialises the game and includes the

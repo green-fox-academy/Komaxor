@@ -31,17 +31,12 @@ class GameManager:
         skeletons = []
         number_of_skeletons = randrange(2, 5)
         for i in range(number_of_skeletons):
-            skeletons.append(Skeleton('Skeleton ' + str(i + 1)))
+            skeletons.append(Skeleton('Skeleton_' + str(i + 1)))
         skeletons[0].has_key = True
         for skeleton in skeletons:
             skeleton.level = self.area_number
             monsters.append(skeleton)
         return monsters
-
-#make some use
-    def get_stats(self):
-        for character in self.characters:
-            print(character.introduce())
 
     def set_free_tiles(self):
         self.area.free_tiles = []
@@ -51,13 +46,11 @@ class GameManager:
                 self.area.free_tiles.append((tile[0], (tile[0].x, tile[0].y)))
 
     def spawn_characters(self, canvas):
-        self.area.character_images = {}
         self.spawn_hero(canvas)
         self.spawn_monsters(canvas)
 
     def spawn_hero(self, canvas):
         self.set_free_tiles()
-        self.hero.image_path = self.hero.image_down
         self.area.draw_character(canvas, self.hero)
         tile = self.area.tiles[0][0]
         tile.has_hero = True
@@ -66,7 +59,6 @@ class GameManager:
         for monster in self.monsters:
             self.set_free_tiles()
             tile = self.area.free_tiles[randrange(len(self.area.free_tiles))]
-            #sometimes monster spawns on top of hero
             monster.y = tile[1][0]
             monster.x = tile[1][1]
             self.area.draw_character(canvas, monster)
@@ -77,6 +69,7 @@ class GameManager:
 
     def set_hero_position(self, canvas, direction):
         self.hero.turn(direction)
+        canvas.delete(self.hero.name)
         self.area.draw_character(canvas, self.hero)
         destination_x, destination_y = self.calculate_destination(self.hero,
                                                                   direction)
@@ -86,15 +79,17 @@ class GameManager:
         if self.check_map(destination_x, destination_y):
             self.get_character_tile(self.hero)[0][0].has_hero = False
             self.hero.x, self.hero.y = destination_x, destination_y
+            canvas.delete(self.hero.name)
             self.area.draw_character(canvas, self.hero)
             self.get_character_tile(self.hero)[0][0].has_hero = True
         else:
             return
         has_monster = self.check_monsters(destination_x, destination_y)
         if has_monster != False:
-            self.fight(self.hero, has_monster)
+            self.fight(canvas, self.hero, has_monster)
             self.hero.level_up()
         self.check_monster_move(canvas)
+        self.check_next_area(canvas)
 
     def check_monster_move(self, canvas):
         if self.area.turn_count % 2 != 0:
@@ -108,11 +103,12 @@ class GameManager:
         destination_x, destination_y = self.calculate_destination(monster,
                                                                 direction)
         self.get_character_tile(monster)[0][0].has_monster = False
+        canvas.delete(monster.name)
         monster.x, monster.y = destination_x, destination_y
         self.area.draw_character(canvas, monster)
         self.get_character_tile(monster)[0][0].has_monster = True
         if self.get_character_tile(monster)[0][0].has_hero:
-            self.fight(monster, self.hero)
+            self.fight(canvas, monster, self.hero)
             self.hero.level_up()
 
     def get_possible_moves(self, monster):
@@ -143,16 +139,16 @@ class GameManager:
     def calculate_destination(self, character, direction):
         if direction == 'up':
             x = character.x
-            y = character.y - 72
+            y = character.y - self.area.tile_size
         elif direction == 'down':
             x = character.x
-            y = character.y + 72
+            y = character.y + self.area.tile_size
         elif direction == 'right':
             y = character.y
-            x = character.x + 72
+            x = character.x + self.area.tile_size
         elif direction == 'left':
             y = character.y
-            x = character.x -72
+            x = character.x - self.area.tile_size
         else:
             y = character.y
             x = character.x
@@ -162,8 +158,7 @@ class GameManager:
         if (((destination_y * self.area.number_of_tiles) / self.area.tile_size)
             + (destination_x / self.area.tile_size) in self.area.walls):
             return True
-        else:
-            return False
+        return False
 
     def check_map(self, destination_x, destination_y):
         if (destination_x < 0
@@ -171,31 +166,30 @@ class GameManager:
             or destination_y < 0
             or destination_y > self.area.size - self.area.tile_size):
             return False
-        else:
-            return True
+        return True
 
     def check_monsters(self, destination_x, destination_y):
         for monster in self.monsters:
             if monster.x == destination_x and monster.y == destination_y:
                 return monster
-        else:
-            return False
+        return False
 
-    def fight(self, attacker, defender):
+    def fight(self, canvas, attacker, defender):
         while attacker.current_health > 0 and defender.current_health > 0:
             attacker.strike(attacker, defender)
-            if self.check_death(defender):
+            if self.check_death(canvas, defender):
                 return
             defender.strike(defender, attacker)
-            self.check_death(attacker)
+            if self.check_death(canvas, attacker):
+                return
 
-    def check_death(self, receiver):
+    def check_death(self, canvas, receiver):
         if receiver.current_health <= 0:
-            del self.area.character_images[receiver.name]
+            canvas.delete(receiver.name)
             self.kill_monster(receiver)
+            self.area.draw_character(canvas, self.hero)
             return True
-        else:
-            return False
+        return False
 
     def kill_monster(self, character):
         self.characters.remove(character)

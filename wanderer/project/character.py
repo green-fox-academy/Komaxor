@@ -1,5 +1,4 @@
 from random import randrange
-from PIL import Image, ImageTk
 
 class Character:
 
@@ -12,7 +11,6 @@ class Character:
         self.strike_point = 0
         self.x = 0
         self.y = 0
-        self.image_path = ''
 
     def rng(self, min=1, max=6):
         return randrange(min, max)
@@ -22,9 +20,6 @@ class Character:
                 ") HP: " + str(int(self.current_health)) + "/" +
                 str(self.max_health) +" | DP: " + str(self.def_point) +
                 " | SP: " + str(self.strike_point))
-
-    def get_image(self):
-        return ImageTk.PhotoImage(Image.open(self.image_path))
 
     def strike(self, attacker, defender):
         strike_value = attacker.strike_point + 2 * self.rng()

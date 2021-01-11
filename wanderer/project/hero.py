@@ -9,23 +9,20 @@ class Hero(Character):
         self.current_health = self.max_health
         self.def_point = 2 * super().rng()
         self.strike_point = 5 + super().rng()
-        self.image_down = "project/assets/hero-down.gif"
-        self.image_up = "project/assets/hero-up.gif"
-        self.image_left = "project/assets/hero-left.gif"
-        self.image_right = "project/assets/hero-right.gif"
-        self.image_path = self.image_down
+        self.direction = 'hero-down'
 
     def turn(self, direction):
         if direction == 'down':
-            self.image_path = self.image_down
+            self.direction = 'hero-down'
         if direction == 'up':
-            self.image_path = self.image_up
+            self.direction = 'hero-up'
         if direction == 'left':
-            self.image_path = self.image_left
+            self.direction = 'hero-left'
         if direction == 'right':
-            self.image_path = self.image_right
+            self.direction = 'hero-right'
 
     def level_up(self):
+        self.level += 1
         self.max_health += super().rng()
         #self.current_health += super().rng()
         self.def_point += super().rng()
@@ -46,7 +43,7 @@ class Hero(Character):
         self.current_health = self.max_health
 
     def restore_health_third(self):
-        self.current_health += self.max_health / 3 #int
+        self.current_health += int(self.max_health / 3)
 
     def restore_health_tenth(self):
-        self.current_health += self.max_health / 10 #int
+        self.current_health += int(self.max_health / 10)

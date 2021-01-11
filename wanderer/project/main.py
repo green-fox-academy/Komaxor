@@ -1,6 +1,6 @@
-from game_manager import GameManager
-from pynput.keyboard import Key, Listener
 from tkinter import Tk, Canvas, Label
+from pynput.keyboard import Key, Listener
+from game_manager import GameManager
 
 class App:
 
@@ -17,10 +17,10 @@ class App:
         self.hero_stat_bar = Label(text=self.game_manager.hero.introduce())
         self.hero_stat_bar.pack()
         self.game_description = Label(text=
-            """Welcome to the Wanderer game! Let's play!
+            '''Welcome to the Wanderer game! Let's play!
             Use the arrow keys or WASD to move the hero.
             Cross path with monsters to fight them.
-            Collect the key and kill the boss to go to the next level.""")
+            Collect the key and kill the boss to go to the next level.''')
         self.game_description.pack()
 
         self.progress_info = Label(text="Area: " +
@@ -50,20 +50,17 @@ class App:
         elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699:
             direction = 'right'
         else:
-            #print('Use the arrow keys or WASD to move and space to fight')
             return
         self.game_turn(direction)
 
     def game_turn(self, direction):
         self.game_manager.set_hero_position(self.canvas, direction)
         if self.game_manager.hero.current_health <= 0:
-            print('Game Over')
             self.game_manager = GameManager()
             self.game_manager.area.draw_map(self.canvas)
             self.game_manager.spawn_characters(self.canvas)
             self.config_labels()
             return
-        self.game_manager.check_next_area(self.canvas)
         self.config_labels()
 
     def config_labels(self):
