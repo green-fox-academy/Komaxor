@@ -15,7 +15,6 @@ class Area:
         self.tiles = []
         self.walls = [13, 15, 17, 18, 21, 22, 23, 25, 28, 35, 41, 42, 43, 45,
                       47, 51, 61, 63, 65, 66, 68, 75, 78, 81, 82, 83, 88, 95]
-        self.free_tiles = []
         self.size = self.tile_size * self.number_of_tiles
 
     def create_map(self):

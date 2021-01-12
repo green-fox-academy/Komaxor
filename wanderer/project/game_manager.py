@@ -39,28 +39,30 @@ class GameManager:
         return monsters
 
     def set_free_tiles(self):
-        self.area.free_tiles = []
+        free_tiles = []
         for tile in self.area.tiles:
             if (tile[0].walkable and not tile[0].has_hero
                 and not tile[0].has_monster):
-                self.area.free_tiles.append((tile[0], (tile[0].x, tile[0].y)))
+                free_tiles.append(tile)
+        return free_tiles
 
     def spawn_characters(self, canvas):
         self.spawn_hero(canvas)
         self.spawn_monsters(canvas)
 
     def spawn_hero(self, canvas):
-        self.set_free_tiles()
+        self.hero.x, self.hero.y = 0, 0
         self.area.draw_character(canvas, self.hero)
         tile = self.area.tiles[0][0]
         tile.has_hero = True
 
     def spawn_monsters(self, canvas):
+        free_tiles = self.set_free_tiles()
         for monster in self.monsters:
-            self.set_free_tiles()
-            tile = self.area.free_tiles[randrange(len(self.area.free_tiles))]
-            monster.y = tile[1][0]
-            monster.x = tile[1][1]
+            tile = free_tiles[randrange(len(free_tiles))]
+            free_tiles.remove(tile)
+            monster.x = tile[2][1]
+            monster.y = tile[2][0]
             self.area.draw_character(canvas, monster)
             tile[0].has_monster = True
 
@@ -220,4 +222,5 @@ class GameManager:
         self.characters = self.create_characters()
         self.monsters = self.characters[1:]
         self.area.draw_map(canvas)
+        canvas.delete(self.hero.name)
         self.spawn_characters(canvas)
