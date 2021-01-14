@@ -223,4 +223,5 @@ class GameManager:
         self.monsters = self.characters[1:]
         self.area.draw_map(canvas)
         canvas.delete(self.hero.name)
+        self.hero.direction = 'hero-down'
         self.spawn_characters(canvas)
