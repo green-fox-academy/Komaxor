@@ -1,5 +1,6 @@
 from random import randrange
 
+
 class Character:
 
     def __init__(self):
@@ -18,7 +19,7 @@ class Character:
     def introduce(self):
         return (self.__class__.__name__ + " (Level " + str(self.level) +
                 ") HP: " + str(int(self.current_health)) + "/" +
-                str(self.max_health) +" | DP: " + str(self.def_point) +
+                str(self.max_health) + " | DP: " + str(self.def_point) +
                 " | SP: " + str(self.strike_point))
 
     def strike(self, attacker, defender):

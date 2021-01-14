@@ -1,5 +1,6 @@
 from character import Character
 
+
 class Hero(Character):
 
     def __init__(self):

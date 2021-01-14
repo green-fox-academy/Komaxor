@@ -2,6 +2,7 @@ from tkinter import Tk, Canvas, Label
 from pynput.keyboard import Key, Listener
 from game_manager import GameManager
 
+
 class App:
 
     def __init__(self):
@@ -33,16 +34,16 @@ class App:
         self.game_manager.spawn_characters(self.canvas)
 
     def on_key_press(self, e):
-        #W or w or up arrow key
+        # W or w or up arrow key
         if e.keycode == 87 or e.keycode == 119 or e.keycode == 8320768:
             direction = 'up'
-        #S or s or down arrow key
+        # S or s or down arrow key
         elif e.keycode == 83 or e.keycode == 115 or e.keycode == 8255233:
             direction = 'down'
-        #A or a or left arrow key
+        # A or a or left arrow key
         elif e.keycode == 65 or e.keycode == 97 or e.keycode == 8124162:
             direction = 'left'
-        #D or d or right arrow key
+        # D or d or right arrow key
         elif e.keycode == 68 or e.keycode == 100 or e.keycode == 8189699:
             direction = 'right'
         else:
@@ -63,5 +64,6 @@ class App:
             str(self.game_manager.area_number) + " | " +
             str(self.game_manager.kill_count) + " monsters slayed.")
         self.hero_stat_bar.config(text=self.game_manager.hero.introduce())
+
 
 app = App()

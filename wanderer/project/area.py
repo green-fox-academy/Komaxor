@@ -85,7 +85,7 @@ class Area:
         self.see_neighbours(0, unseen, seen)
         self.check_seen(unseen, seen, been)
         while len(set(self.floors)) != len(set(been)):
-            self.check_over_walls(unseen, seen, been)
+            self.check_unseen(unseen, seen, been)
             self.check_seen(unseen, seen, been)
         if len(self.floors) < 6:  # max characters
             self.random_map()
@@ -110,11 +110,10 @@ class Area:
                 been.append(tile)
                 self.see_neighbours(tile, unseen, seen)
 
-    def check_over_walls(self, unseen, seen, been):
+    def check_unseen(self, unseen, seen, been):
         unseen_floors = list(set(unseen).intersection(set(self.floors)))
         counter = 1
         for tile in unseen_floors:
-            # connect isolated floors with 1 break
             if (tile - 2 in been and tile - 1 in self.walls and
                     tile - 1 in seen):
                 self.break_wall(tile - 1)
@@ -157,17 +156,12 @@ class Area:
                   tile + 1 in seen):
                 self.break_wall(tile + 1)
                 return
-            # wall isolated block that cannot be connected with 1 break
             else:
-                print('else')
-                print(counter, len(unseen_floors))
                 if counter == len(unseen_floors):
                     self.make_wall(tile)
-                    print('wall made')
                     return
                 else:
                     counter += 1
-                    print('counter increased')
                     continue
 
     def break_wall(self, tile_between):

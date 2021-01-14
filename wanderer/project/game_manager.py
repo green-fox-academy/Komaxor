@@ -5,6 +5,7 @@ from monster import Monster
 from skeleton import Skeleton
 from boss import Boss
 
+
 class GameManager:
 
     def __init__(self):

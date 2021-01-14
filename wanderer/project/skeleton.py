@@ -1,5 +1,6 @@
 from monster import Monster
 
+
 class Skeleton(Monster):
 
     def __init__(self, name='Skeleton_#'):
