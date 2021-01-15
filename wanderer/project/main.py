@@ -1,37 +1,59 @@
 from tkinter import Tk, Canvas, Label
 from pynput.keyboard import Key, Listener
 from game_manager import GameManager
+from time import time, sleep
 
 
 class App:
 
     def __init__(self):
+        self.setup_gui()
+        self.key_listener()
+        self.root.mainloop()
+
+    def setup_gui(self):
+        self.create_window()
+        self.game_manager = GameManager()
+        self.create_canvas()
+        self.create_stat_bar()
+        self.create_description()
+        self.create_info_bar()
+
+    def create_window(self):
         self.root = Tk()
         self.root.title("Wanderer by Mark Ambrus")
-        self.game_manager = GameManager()
+
+    def create_canvas(self):
         self.size = self.game_manager.area.size
         self.canvas = Canvas(self.root, width=self.size, height=self.size)
         self.canvas.pack()
         self.fill_canvas()
+
+    def fill_canvas(self):
+        self.game_manager.area.draw_map(self.canvas)
+        self.game_manager.spawn_characters(self.canvas)
+
+    def create_stat_bar(self):
         self.hero_stat_bar = Label(text=self.game_manager.hero.introduce())
         self.hero_stat_bar.pack()
+
+    def create_description(self):
         self.game_description = Label(text=
             '''Welcome to the Wanderer game! Let's play!
             Use the arrow keys or WASD to move the hero.
             Cross path with monsters to fight them.
             Collect the key and kill the boss to go to the next level.''')
         self.game_description.pack()
+
+    def create_info_bar(self):
         self.progress_info = Label(text="Area: " +
             str(self.game_manager.area_number) + " | " +
             str(self.game_manager.kill_count) + " monsters slayed.")
         self.progress_info.pack()
+
+    def key_listener(self):
         self.canvas.bind("<KeyPress>", self.on_key_press)
         self.canvas.focus_set()
-        self.root.mainloop()
-
-    def fill_canvas(self):
-        self.game_manager.area.draw_map(self.canvas)
-        self.game_manager.spawn_characters(self.canvas)
 
     def on_key_press(self, e):
         # W or w or up arrow key
