@@ -96,9 +96,12 @@ class GameManager:
 
     def check_monster_move(self, canvas):
         if self.area.turn_count % 2 != 0:
+            self.move_monsters(canvas)
+        self.area.increase_turn_count()
+
+    def move_monsters(self, canvas):
             for monster in self.monsters:
                 self.set_monster_position(canvas, monster)
-        self.area.increase_turn_count()
 
     def set_monster_position(self, canvas, monster):
         directions = self.get_possible_moves(monster)

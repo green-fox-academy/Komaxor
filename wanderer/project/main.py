@@ -1,14 +1,15 @@
 from tkinter import Tk, Canvas, Label
 from pynput.keyboard import Key, Listener
 from game_manager import GameManager
-from time import time, sleep
 
 
 class App:
 
     def __init__(self):
         self.setup_gui()
+        self.root.protocol("WM_DELETE_WINDOW", self.callback)
         self.key_listener()
+        self.move_monsters()
         self.root.mainloop()
 
     def setup_gui(self):
@@ -87,5 +88,12 @@ class App:
             str(self.game_manager.kill_count) + " monsters slayed.")
         self.hero_stat_bar.config(text=self.game_manager.hero.introduce())
 
+    def move_monsters(self):
+        x = 2000 # 2 sec basic
+        self.game_manager.move_monsters(self.canvas)
+        self.root.after(x, self.move_monsters)
+
+    def callback(self):
+        self.root.quit()
 
 app = App()
