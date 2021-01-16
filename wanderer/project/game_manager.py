@@ -90,9 +90,7 @@ class GameManager:
         has_monster = self.check_monsters(destination_x, destination_y)
         if has_monster != False:
             self.fight(canvas, self.hero, has_monster)
-            self.hero.level_up()
         # self.check_monster_move(canvas)  # enable: monsters move every 2 turn
-        self.check_next_area(canvas)
 
     def check_monster_move(self, canvas):
         if self.area.turn_count % 2 != 0:
@@ -115,7 +113,6 @@ class GameManager:
         self.get_character_tile(monster)[0][0].has_monster = True
         if self.get_character_tile(monster)[0][0].has_hero:
             self.fight(canvas, monster, self.hero)
-            self.hero.level_up()
 
     def get_possible_moves(self, monster):
         directions = ['up', 'down', 'left', 'right']
@@ -191,33 +188,30 @@ class GameManager:
 
     def check_death(self, canvas, receiver):
         if receiver.current_health <= 0:
-            canvas.delete(receiver.name)
-            self.kill_monster(receiver)
-            self.area.draw_character(canvas, self.hero)
-            return True
+            if isinstance(receiver, Monster):
+                self.kill_monster(canvas, receiver)
+                return True
         return False
 
-    def kill_monster(self, character):
-        self.characters.remove(character)
-        if isinstance(character, Monster):
-            self.monsters.remove(character)
-            self.kill_count += 1
+    def kill_monster(self, canvas, monster):
+        self.monster_dies(canvas, monster)
+        self.kill_count += 1
+        self.hero.level_up()
+
+    def monster_dies(self, canvas, monster):
+        canvas.delete(monster.name)
+        self.characters.remove(monster)
+        self.monsters.remove(monster)
 
     def check_next_area(self, canvas):
         if not self.check_boss() and not self.check_key():
             self.next_area(canvas)
 
     def check_boss(self):
-        for monster in self.monsters:
-            if isinstance(monster, Boss):
-                return True
-        return False
+        return any(isinstance(monster, Boss) for monster in self.monsters)
 
     def check_key(self):
-        for monster in self.monsters:
-            if monster.has_key:
-                return True
-        return False
+        return any(monster.has_key for monster in self.monsters)
 
     def next_area(self, canvas):
         self.area_number += 1

@@ -75,18 +75,7 @@ class App:
 
     def game_turn(self, direction):
         self.game_manager.set_hero_position(self.canvas, direction)
-        if self.game_manager.hero.current_health <= 0:
-            self.game_manager = GameManager()
-            self.fill_canvas()
-            #self.config_labels()
-            #return
-        self.config_labels()
-
-    def config_labels(self):
-        self.progress_info.config(text="Area: " +
-            str(self.game_manager.area_number) + " | " +
-            str(self.game_manager.kill_count) + " monsters slayed.")
-        self.hero_stat_bar.config(text=self.game_manager.hero.introduce())
+        self.after_move()
 
     def move_monsters(self):
         stay = 1500 - (self.game_manager.area_number * 40)  # 1.5 sec - diff
@@ -94,7 +83,25 @@ class App:
         if stay < min_stay:
             stay = min_stay
         self.game_manager.move_monsters(self.canvas)
+        self.after_move()
         self.root.after(stay, self.move_monsters)
+
+    def after_move(self):
+        self.check_hero_death()
+        self.game_manager.check_next_area(self.canvas)
+        self.config_labels()
+
+    def check_hero_death(self):
+        if self.game_manager.hero.current_health <= 0:
+            self.canvas.delete("all")
+            self.game_manager = GameManager()
+            self.fill_canvas()
+
+    def config_labels(self):
+        self.progress_info.config(text="Area: " +
+            str(self.game_manager.area_number) + " | " +
+            str(self.game_manager.kill_count) + " monsters slayed.")
+        self.hero_stat_bar.config(text=self.game_manager.hero.introduce())
 
     def callback(self):
         self.root.quit()

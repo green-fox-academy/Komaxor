@@ -1,27 +1,23 @@
+from resources import Resources
 from random import randrange
-
 from floor import Floor
 from wall import Wall
-from PIL import Image
 from tkinter.constants import NW
-from resources import Resources
 from monster import Monster
 
 
 class Area:
 
     def __init__(self):
-        self.turn_count = 0
         self.resources = Resources()
-        self.number_of_tiles = 10
+        self.number_of_tiles = 10  # bring out
         self.tile_size = self.resources.floor_size
-        self.tiles = []
-        self.walls = []
-        self.floors = []
         self.size = self.tile_size * self.number_of_tiles
+        self.turn_count = 0
 
     def create_map(self):
         self.random_map()
+        self.tiles = []
         for i in range(self.number_of_tiles):
             for j in range(self.number_of_tiles):
                 tile = []
