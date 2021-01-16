@@ -43,7 +43,7 @@ class GameManager:
         free_tiles = []
         for tile in self.area.tiles:
             if (tile[0].walkable and not tile[0].has_hero
-                and not tile[0].has_monster):
+                    and not tile[0].has_monster):
                 free_tiles.append(tile)
         return free_tiles
 
@@ -91,7 +91,7 @@ class GameManager:
         if has_monster != False:
             self.fight(canvas, self.hero, has_monster)
             self.hero.level_up()
-        self.check_monster_move(canvas)
+        # self.check_monster_move(canvas)  # enable: monsters move every 2 turn
         self.check_next_area(canvas)
 
     def check_monster_move(self, canvas):
@@ -100,14 +100,14 @@ class GameManager:
         self.area.increase_turn_count()
 
     def move_monsters(self, canvas):
-            for monster in self.monsters:
-                self.set_monster_position(canvas, monster)
+        for monster in self.monsters:
+            self.set_monster_position(canvas, monster)
 
     def set_monster_position(self, canvas, monster):
         directions = self.get_possible_moves(monster)
         direction = directions[randrange(len(directions))]
         destination_x, destination_y = self.calculate_destination(monster,
-                                                                direction)
+                                                                  direction)
         self.get_character_tile(monster)[0][0].has_monster = False
         canvas.delete(monster.name)
         monster.x, monster.y = destination_x, destination_y
@@ -162,7 +162,7 @@ class GameManager:
 
     def check_walls(self, destination_x, destination_y):
         if (((destination_y * self.area.number_of_tiles) / self.area.tile_size)
-            + (destination_x / self.area.tile_size) in self.area.walls):
+                + (destination_x / self.area.tile_size) in self.area.walls):
             return True
         return False
 
@@ -170,7 +170,7 @@ class GameManager:
         if (destination_x < 0
             or destination_x > self.area.size - self.area.tile_size
             or destination_y < 0
-            or destination_y > self.area.size - self.area.tile_size):
+                or destination_y > self.area.size - self.area.tile_size):
             return False
         return True
 

@@ -9,7 +9,7 @@ class App:
         self.setup_gui()
         self.root.protocol("WM_DELETE_WINDOW", self.callback)
         self.key_listener()
-        self.move_monsters()
+        self.move_monsters()  # enable: monsters move periodically
         self.root.mainloop()
 
     def setup_gui(self):
@@ -78,8 +78,8 @@ class App:
         if self.game_manager.hero.current_health <= 0:
             self.game_manager = GameManager()
             self.fill_canvas()
-            self.config_labels()
-            return
+            #self.config_labels()
+            #return
         self.config_labels()
 
     def config_labels(self):
@@ -89,11 +89,15 @@ class App:
         self.hero_stat_bar.config(text=self.game_manager.hero.introduce())
 
     def move_monsters(self):
-        x = 2000 # 2 sec basic
+        stay = 1500 - (self.game_manager.area_number * 40)  # 1.5 sec - diff
+        min_stay = 300  # minimim 0.3 seconds monsters stay
+        if stay < min_stay:
+            stay = min_stay
         self.game_manager.move_monsters(self.canvas)
-        self.root.after(x, self.move_monsters)
+        self.root.after(stay, self.move_monsters)
 
     def callback(self):
         self.root.quit()
+
 
 app = App()
