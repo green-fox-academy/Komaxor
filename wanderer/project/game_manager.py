@@ -88,7 +88,7 @@ class GameManager:
         else:
             return
         has_monster = self.check_monsters(destination_x, destination_y)
-        if has_monster != False:
+        if has_monster is not None:
             self.fight(canvas, self.hero, has_monster)
         # self.check_monster_move(canvas)  # enable: monsters move every 2 turn
 
@@ -119,7 +119,7 @@ class GameManager:
         bad_directions = []
         for direction in directions:
             destination_x, destination_y = self.calculate_destination(monster,
-                                                                    direction)
+                                                                      direction)
             is_wall = self.check_walls(destination_x, destination_y)
             if is_wall:
                 bad_directions.append(direction)
@@ -128,7 +128,7 @@ class GameManager:
                 bad_directions.append(direction)
                 continue
             has_monster = self.check_monsters(destination_x, destination_y)
-            if has_monster != False:
+            if has_monster is not None:
                 bad_directions.append(direction)
                 continue
         if len(bad_directions) != 0:
@@ -175,7 +175,7 @@ class GameManager:
         for monster in self.monsters:
             if monster.x == destination_x and monster.y == destination_y:
                 return monster
-        return False
+        return None
 
     def fight(self, canvas, attacker, defender):
         while attacker.current_health > 0 and defender.current_health > 0:

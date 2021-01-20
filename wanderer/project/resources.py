@@ -20,8 +20,7 @@ class Resources:
         self.floor_size = self.images['floor'].width()
 
     def load_image(self, path):
-        img = ImageTk.PhotoImage(Image.open(path))
-        return img
+        return ImageTk.PhotoImage(Image.open(path))
 
     def get_image(self, key):
         return self.images[key]

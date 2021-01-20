@@ -10,9 +10,12 @@ class Area:
 
     def __init__(self):
         self.resources = Resources()
-        self.number_of_tiles = 10  # bring out
+        self.number_of_tiles = 10
         self.tile_size = self.resources.floor_size
         self.size = self.tile_size * self.number_of_tiles
+        self.tiles = []
+        self.floors = []
+        self.walls = []
         self.turn_count = 0
 
     def create_map(self):
@@ -61,16 +64,10 @@ class Area:
         self.floors.append(0)
         for i in range(1, self.number_of_tiles ** 2):
             random = randrange(0, 10)
-            if random < randrange(3, 7):
+            if random < randrange(3, 7):  # varying wall count
                 self.walls.append(i)
             else:
                 self.floors.append(i)
-        if len(self.floors) < 6:  # max characters
-            self.random_map()
-        start_block = [0, 1, 2, self.number_of_tiles, 2 *
-                       self.number_of_tiles, self.number_of_tiles + 1]
-        if all(tiles in self.walls for tiles in start_block):
-            self.random_map()
         self.connect_map()
 
     def connect_map(self):

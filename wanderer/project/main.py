@@ -39,17 +39,18 @@ class App:
         self.hero_stat_bar.pack()
 
     def create_description(self):
-        self.game_description = Label(text=
-            '''Welcome to the Wanderer game! Let's play!
-            Use the arrow keys or WASD to move the hero.
+        self.game_description = Label(text='''Welcome to the Wanderer game!
+            Let's play! Use the arrow keys or WASD to move the hero.
             Cross path with monsters to fight them.
             Collect the key and kill the boss to go to the next level.''')
         self.game_description.pack()
 
     def create_info_bar(self):
         self.progress_info = Label(text="Area: " +
-            str(self.game_manager.area_number) + " | " +
-            str(self.game_manager.kill_count) + " monsters slayed.")
+                                   str(self.game_manager.area_number) +
+                                   " | " +
+                                   str(self.game_manager.kill_count) +
+                                   " monsters slayed.")
         self.progress_info.pack()
 
     def key_listener(self):
@@ -78,13 +79,19 @@ class App:
         self.after_move()
 
     def move_monsters(self):
-        stay = 1500 - (self.game_manager.area_number * 40)  # 1.5 sec - diff
-        min_stay = 300  # minimim 0.3 seconds monsters stay
-        if stay < min_stay:
-            stay = min_stay
+        wait = self.calculate_wait()
         self.game_manager.move_monsters(self.canvas)
         self.after_move()
-        self.root.after(stay, self.move_monsters)
+        self.root.after(wait, self.move_monsters)
+
+    def calculate_wait(self):
+        difficulty = (self.game_manager.area_number - 1) * 40
+        wait = 1500 - difficulty  # max 1.5 sec wait
+        min_wait = 300  # min 0.3 sec wait
+        if wait < min_wait:
+            return min_wait
+        else:
+            return wait
 
     def after_move(self):
         self.check_hero_death()
@@ -99,8 +106,10 @@ class App:
 
     def config_labels(self):
         self.progress_info.config(text="Area: " +
-            str(self.game_manager.area_number) + " | " +
-            str(self.game_manager.kill_count) + " monsters slayed.")
+                                  str(self.game_manager.area_number) +
+                                  " | " +
+                                  str(self.game_manager.kill_count) +
+                                  " monsters slayed.")
         self.hero_stat_bar.config(text=self.game_manager.hero.introduce())
 
     def callback(self):
