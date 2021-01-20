@@ -3,27 +3,31 @@
 ## Project structure:
 
 The project folder includes all relevant files for the project.
-There are 11 .py scripts and the assets folder that contains 8 .gif images.
+There are 12 .py scripts, and the assets folder that contains 8 .gif images.
 2 of those are for the two types of tiles, 4 for the hero and 2 for the two
 types of monsters.
+
 
 ## Required to launch:
 
 1. Have the repository cloned to your device.
 2. Have Pthon 3.x installed on your device.
    The program was written in python 3.9.0 and is meant to be used with Python 3.x.
+   
 
 ## How to use:
 
-1. Open the terminal and navigate inside the project directory.
-2. Type "python3 main.py" to start the app.
+1. Open the terminal and navigate inside the main directory.
+2. Type "python3 project/main.py" to start the app.
 
 ```bash
-python3 main.py
+cd ibs-public-wanderer
+python3 project/main.py
 ```
 
 3. Use the arrow keys or WASD to move the hero around
 4. Close the application window once finished playing.
+
 
 ## Notes:
 
@@ -35,17 +39,20 @@ The project is uploaded as a directory of a repository instead of a separate
 repository with the permission of the client.
 
 If client wants monsters to move according to **Task 15**:
--activate `game_manager.py` line 93 and
--comment out `main.py` line 12.
-If client want monsters to move according to **Task 18**:
--comment out `game_manager.py` line 93 and
--activate `main.py` line 12.
+
+Activate `game_manager.py` line 93 and comment out `main.py` line 12.
+
+If client wants monsters to move according to **Task 18**:
+
+Comment out `game_manager.py` line 93 and activate `main.py` line 12.
+
 
 ## Code structure:
 
 The app contains the following classes:
 
 ![classes.jpg](project/assets/classes.jpg)
+
 
 The `App` class sets up the graphical user interface, deals with the player's
 inputs and includes the mainloop.
